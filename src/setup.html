@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blitz App Setup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 255, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #00ff00, #00cc00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            color: #888;
+            margin-bottom: 32px;
+            font-size: 16px;
+        }
+        
+        .section {
+            background: #0a0a0a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        h2 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #00ff00;
+        }
+        
+        p {
+            color: #aaa;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #00ff00, #00cc00);
+            color: #000;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 255, 0, 0.3);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status {
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 200px;
+            overflow-y: auto;
+            color: #888;
+        }
+        
+        .status.success {
+            border-color: #00ff00;
+            color: #00ff00;
+        }
+        
+        .status.error {
+            border-color: #ff0000;
+            color: #ff0000;
+        }
+        
+        .credentials {
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 16px;
+        }
+        
+        .user-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .user-card h3 {
+            color: #00ff00;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .user-detail {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #2a2a2a;
+            font-size: 14px;
+        }
+        
+        .user-detail:last-child {
+            border-bottom: none;
+        }
+        
+        .user-detail .label {
+            color: #888;
+        }
+        
+        .user-detail .value {
+            color: #fff;
+            font-weight: 500;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #2a2a2a;
+            border-top-color: #00ff00;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ Blitz App Setup</h1>
+        <p class="subtitle">Initialize test users and sample data for the Blitz e-bike app</p>
+        
+        <div class="section">
+            <h2>Step 1: Create Test Users</h2>
+            <p>Create 3 test users (Mike, Sarah, and 李明) with complete profiles and statistics.</p>
+            <button id="seedUsersBtn" onclick="seedUsers()">Create Test Users</button>
+            <div id="seedStatus" class="status" style="display: none;"></div>
+        </div>
+        
+        <div class="section">
+            <h2>Step 2: Create Sample Posts</h2>
+            <p>Create initial community posts from the test users to populate the feed.</p>
+            <button id="createPostsBtn" onclick="createSamplePosts()" disabled>Create Sample Posts</button>
+            <div id="postsStatus" class="status" style="display: none;"></div>
+        </div>
+        
+        <div class="section">
+            <h2>Test User Credentials</h2>
+            <p>Use these credentials to log in to the app:</p>
+            
+            <div class="credentials">
+                <div class="user-card">
+                    <h3>👨 User 1: Mike Johnson (English)</h3>
+                    <div class="user-detail">
+                        <span class="label">Email:</span>
+                        <span class="value">mike.johnson@blitz.com</span>
+                    </div>
+                    <div class="user-detail">
+                        <span class="label">Password:</span>
+                        <span class="value">MikeBlitz2024!</span>
+                    </div>
+                    <div class="user-detail">
+                        <span class="label">Bike:</span>
+                        <span class="value">BESV JF1</span>
+                    </div>
+                    <div class="user-detail">
+                        <span class="label">Stats:</span>
+                        <span class="value">2,156 km • Rank #1 • Platinum</span>
+                    </div>
+                </div>
+                
+                <div class="user-card">
+                    <h3>👩 User 2: Sarah Chen (English)</h3>
+                    <div class="user-detail">
+                        <span class="label">Email:</span>
+                        <span class="value">sarah.chen@blitz.com</span>
+                    </div>
+                    <div class="user-detail">
+                        <span class="label">Password:</span>
+                        <span class="value">SarahGreen2024!</span>
+                    </div>
+                    <div class="user-detail">
+                        <span class="label">Bike:</span>
+                        <span class="value">BESV TRS1 AM</span>
+                    </div>
+                    <div class="user-detail">
+                        <span class="label">Stats:</span>
+                        <span class="value">1,434 km • Rank #2 • Gold</span>
+                    </div>
+                </div>
+                
+                <div class="user-card">
+                    <h3>🧑 User 3: 李明 (Chinese)</h3>
+                    <div class="user-detail">
+                        <span class="label">Email:</span>
+                        <span class="value">li.ming@blitz.com</span>
+                    </div>
+                    <div class="user-detail">
+                        <span class="label">Password:</span>
+                        <span class="value">LiMing2024!</span>
+                    </div>
+                    <div class="user-detail">
+                        <span class="label">Bike:</span>
+                        <span class="value">BESV PSA1</span>
+                    </div>
+                    <div class="user-detail">
+                        <span class="label">Stats:</span>
+                        <span class="value">876 km • Rank #4 • Silver</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE = 'https://utvozryyrirwllumubqn.supabase.co/functions/v1/server/make-server-8ab7634a';
+        
+        const seedUsersData = [
+            {
+                email: "mike.johnson@blitz.com",
+                password: "MikeBlitz2024!",
+                username: "Mike Johnson",
+                avatar: "👨",
+                location: "San Francisco, CA",
+                bio: "Trail finder and coffee lover ☕🚴‍♂️",
+                bikeModel: "BESV JF1",
+                battery: 82,
+                totalDistance: 2156.8,
+                todayDistance: 15.7,
+                totalRides: 243,
+                totalTime: 156.3,
+                avgSpeed: 13.8,
+                carbonSaved: 252.4,
+                energyPoints: 5820,
+                calories: 42350,
+                elevation: 15680,
+                visitedLandmarks: ["1", "2", "3", "4"],
+                carbonRank: 1,
+                badge: "platinum",
+                friendsCount: 52,
+                posts: 31,
+                achievements: ["first_ride", "100km", "500km", "1000km", "2000km", "carbon_hero", "social_butterfly", "early_bird"],
+                notifications: 5,
+                recentRides: [
+                    { date: "2024-11-19", distance: 15.7, time: 1.2, avgSpeed: 13.1, calories: 285 },
+                    { date: "2024-11-18", distance: 22.3, time: 1.6, avgSpeed: 13.9, calories: 412 }
+                ]
+            },
+            {
+                email: "sarah.chen@blitz.com",
+                password: "SarahGreen2024!",
+                username: "Sarah Chen",
+                avatar: "👩",
+                location: "Oakland, CA",
+                bio: "Weekend warrior on two wheels | Green commuter 🌱",
+                bikeModel: "BESV TRS1 AM",
+                battery: 65,
+                totalDistance: 1434.2,
+                todayDistance: 8.4,
+                totalRides: 178,
+                totalTime: 98.7,
+                avgSpeed: 14.5,
+                carbonSaved: 167.9,
+                energyPoints: 3860,
+                calories: 28120,
+                elevation: 9340,
+                visitedLandmarks: ["1", "3", "5"],
+                carbonRank: 2,
+                badge: "gold",
+                friendsCount: 38,
+                posts: 24,
+                achievements: ["first_ride", "100km", "500km", "1000km", "eco_warrior", "weekend_rider"],
+                notifications: 3,
+                recentRides: [
+                    { date: "2024-11-19", distance: 8.4, time: 0.6, avgSpeed: 14.0, calories: 162 },
+                    { date: "2024-11-17", distance: 16.2, time: 1.1, avgSpeed: 14.7, calories: 298 }
+                ]
+            },
+            {
+                email: "li.ming@blitz.com",
+                password: "LiMing2024!",
+                username: "李明",
+                avatar: "🧑",
+                location: "上海市",
+                bio: "上班通勤 | BESV 爱好者 🚴",
+                bikeModel: "BESV PSA1",
+                battery: 58,
+                totalDistance: 876.3,
+                todayDistance: 5.2,
+                totalRides: 132,
+                totalTime: 67.4,
+                avgSpeed: 13.0,
+                carbonSaved: 102.6,
+                energyPoints: 2340,
+                calories: 17180,
+                elevation: 5620,
+                visitedLandmarks: ["1", "2"],
+                carbonRank: 4,
+                badge: "silver",
+                friendsCount: 25,
+                posts: 15,
+                achievements: ["first_ride", "100km", "500km", "daily_commuter"],
+                notifications: 2,
+                recentRides: [
+                    { date: "2024-11-19", distance: 5.2, time: 0.4, avgSpeed: 13.0, calories: 98 },
+                    { date: "2024-11-18", distance: 6.8, time: 0.5, avgSpeed: 13.6, calories: 128 }
+                ]
+            }
+        ];
+        
+        let userTokens = [];
+        
+        async function seedUsers() {
+            const btn = document.getElementById('seedUsersBtn');
+            const status = document.getElementById('seedStatus');
+            
+            btn.disabled = true;
+            btn.innerHTML = 'Creating Users<span class="loading"></span>';
+            status.style.display = 'block';
+            status.className = 'status';
+            status.innerHTML = 'Starting user creation...\n';
+            
+            try {
+                userTokens = [];
+                
+                for (const userData of seedUsersData) {
+                    status.innerHTML += `\nCreating ${userData.username}...`;
+                    
+                    const response = await fetch(`${API_BASE}/signup`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: userData.email,
+                            password: userData.password,
+                            username: userData.username,
+                            avatar: userData.avatar,
+                            contactType: 'email',
+                            seedData: userData
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        status.innerHTML += ` ✓ Success`;
+                        
+                        // Log in to get access token
+                        const loginResponse = await fetch(`${API_BASE}/signin`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                email: userData.email,
+                                password: userData.password
+                            })
+                        });
+                        
+                        const loginData = await loginResponse.json();
+                        if (loginResponse.ok && loginData.accessToken) {
+                            userTokens.push({
+                                username: userData.username,
+                                token: loginData.accessToken
+                            });
+                        }
+                    } else {
+                        if (data.error && data.error.includes('already')) {
+                            status.innerHTML += ` ⚠ Already exists`;
+                            
+                            // Try to log in to get token
+                            const loginResponse = await fetch(`${API_BASE}/signin`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    email: userData.email,
+                                    password: userData.password
+                                })
+                            });
+                            
+                            const loginData = await loginResponse.json();
+                            if (loginResponse.ok && loginData.accessToken) {
+                                userTokens.push({
+                                    username: userData.username,
+                                    token: loginData.accessToken
+                                });
+                            }
+                        } else {
+                            status.innerHTML += ` ✗ Failed: ${data.error}`;
+                        }
+                    }
+                }
+                
+                status.className = 'status success';
+                status.innerHTML += '\n\n✅ All users processed successfully!';
+                status.innerHTML += '\n\nYou can now create sample posts.';
+                
+                // Enable next button
+                document.getElementById('createPostsBtn').disabled = false;
+                
+            } catch (error) {
+                status.className = 'status error';
+                status.innerHTML += `\n\n❌ Error: ${error.message}`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Create Test Users';
+            }
+        }
+        
+        async function createSamplePosts() {
+            const btn = document.getElementById('createPostsBtn');
+            const status = document.getElementById('postsStatus');
+            
+            btn.disabled = true;
+            btn.innerHTML = 'Creating Posts<span class="loading"></span>';
+            status.style.display = 'block';
+            status.className = 'status';
+            status.innerHTML = 'Starting post creation...\n';
+            
+            const samplePosts = [
+                {
+                    username: "Mike Johnson",
+                    content: "Just completed my longest ride yet! 42km through Golden Gate Park. The new BESV JF1 handles like a dream! 🚴‍♂️⚡",
+                },
+                {
+                    username: "Sarah Chen",
+                    content: "Beautiful morning commute today! Love seeing the sunrise while riding. Every ride is a small step towards a greener future 🌱🚴‍♀️",
+                },
+                {
+                    username: "李明",
+                    content: "今天通勤很顺利，电量还剩58%。BESV的续航能力真是太棒了！💚",
+                },
+                {
+                    username: "Mike Johnson",
+                    content: "Met some awesome riders at the trail today. The BESV community is growing! Who's up for a group ride this weekend?",
+                },
+                {
+                    username: "Sarah Chen",
+                    content: "Reached 1,500km total distance milestone! 🎉 This journey has been incredible. Thanks to everyone who's been supporting sustainable transportation!",
+                }
+            ];
+            
+            try {
+                let postsCreated = 0;
+                
+                for (const post of samplePosts) {
+                    const userToken = userTokens.find(u => u.username === post.username);
+                    
+                    if (!userToken) {
+                        status.innerHTML += `\n⚠ Skipping post from ${post.username} (no token)`;
+                        continue;
+                    }
+                    
+                    status.innerHTML += `\nCreating post from ${post.username}...`;
+                    
+                    const response = await fetch(`${API_BASE}/posts`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${userToken.token}`
+                        },
+                        body: JSON.stringify({
+                            content: post.content
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        status.innerHTML += ` ✓`;
+                        postsCreated++;
+                    } else {
+                        const data = await response.json();
+                        status.innerHTML += ` ✗ Failed: ${data.error}`;
+                    }
+                }
+                
+                status.className = 'status success';
+                status.innerHTML += `\n\n✅ Created ${postsCreated} sample posts!`;
+                status.innerHTML += '\n\nSetup complete! You can now log in to the app.';
+                
+            } catch (error) {
+                status.className = 'status error';
+                status.innerHTML += `\n\n❌ Error: ${error.message}`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Create Sample Posts';
+            }
+        }
+    </script>
+</body>
+</html>

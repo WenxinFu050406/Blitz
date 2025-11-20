@@ -1,0 +1,168 @@
+import { Battery, Zap, Lock, Unlock, Lightbulb, Bell, MoreHorizontal } from 'lucide-react';
+import { bikeDevice } from '../data/mockData';
+import { Card } from './ui/card';
+import { Badge } from './ui/badge';
+import { Button } from './ui/button';
+import { Switch } from './ui/switch';
+import { ImageWithFallback } from './figma/ImageWithFallback';
+import { LanguageSelector } from './LanguageSelector';
+import { useLanguage } from '../context/LanguageContext';
+import { getTranslation } from '../locales/translations';
+import { StartRide } from './home/StartRide';
+import { BluetoothConnect } from './home/BluetoothConnect';
+import { useState } from 'react';
+
+export function MainPage() {
+  const { language } = useLanguage();
+  const t = getTranslation(language).mainPage;
+  const [showStartRide, setShowStartRide] = useState(false);
+  const [showBluetooth, setShowBluetooth] = useState(false);
+  const [bikeLocked, setBikeLocked] = useState(true);
+  const [lampOn, setLampOn] = useState(true);
+  const [alarmOn, setAlarmOn] = useState(false);
+
+  const bikeImage = "https://images.unsplash.com/photo-1700915555684-b48e35b67c15?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080";
+
+  if (showStartRide) {
+    return <StartRide onBack={() => setShowStartRide(false)} />;
+  }
+
+  if (showBluetooth) {
+    return <BluetoothConnect onBack={() => setShowBluetooth(false)} />;
+  }
+
+  return (
+    <div className="flex flex-col h-full bg-background text-foreground p-4 overflow-y-auto">
+      {/* Header */}
+      <div className="flex items-start justify-between mb-2">
+        <div>
+          <h1 className="text-xl font-bold">Smart Electric Bike</h1>
+          <div className="flex items-center gap-2 mt-1">
+            <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <span className="text-xs text-primary font-medium">Connected</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <LanguageSelector />
+          <div className="w-8 h-8 rounded-full bg-card border border-border overflow-hidden">
+             {/* User Avatar Placeholder */}
+             <div className="w-full h-full bg-muted flex items-center justify-center text-xs">ME</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bike Image */}
+      <div className="relative h-64 w-full flex items-center justify-center my-4">
+        <ImageWithFallback 
+          src={bikeImage} 
+          alt="Smart Bike" 
+          className="h-full object-contain drop-shadow-2xl"
+        />
+      </div>
+
+      {/* Lock Slider (Visual) */}
+      <div 
+        className="mb-6 bg-card border border-border rounded-full p-1.5 flex items-center justify-between cursor-pointer relative overflow-hidden group w-full h-20"
+        onClick={() => setBikeLocked(!bikeLocked)}
+      >
+        <div className={`
+          absolute inset-0 transition-opacity duration-300
+          ${!bikeLocked ? 'bg-primary/10' : 'bg-transparent'}
+        `} />
+        
+        <div className={`
+          w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 z-10
+          ${bikeLocked ? 'bg-primary text-black translate-x-0' : 'bg-muted text-muted-foreground translate-x-[calc(100vw-4rem-2rem)]'}
+        `}>
+          {bikeLocked ? <Lock className="w-5 h-5" /> : <Unlock className="w-5 h-5" />}
+        </div>
+        
+        <span className="text-sm font-medium text-muted-foreground absolute left-1/2 -translate-x-1/2 pointer-events-none uppercase tracking-widest opacity-70">
+          {bikeLocked ? 'Swipe to unlock >>' : '<< Swipe to lock'}
+        </span>
+
+        <div className={`
+          w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 z-10
+          ${!bikeLocked ? 'bg-primary text-black -translate-x-0' : 'bg-transparent text-muted-foreground translate-x-0 opacity-0'}
+        `}>
+           {!bikeLocked && <Unlock className="w-5 h-5" />}
+        </div>
+      </div>
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-3 gap-3 mb-4">
+        <Card className="p-3 bg-card border-border flex flex-col items-center justify-center text-center h-24">
+          <span className="text-xs text-muted-foreground mb-1">Usage Time</span>
+          <span className="text-lg font-bold">64h 13m</span>
+        </Card>
+        <Card className="p-3 bg-card border-border flex flex-col items-center justify-center text-center h-24">
+          <span className="text-xs text-muted-foreground mb-1">Calories</span>
+          <span className="text-lg font-bold">535 KCal</span>
+        </Card>
+        <Card className="p-3 bg-card border-border flex flex-col items-center justify-center text-center h-24">
+          <span className="text-xs text-muted-foreground mb-1">Distance</span>
+          <span className="text-lg font-bold">{bikeDevice.totalDistance} Km</span>
+        </Card>
+      </div>
+
+      {/* Controls */}
+      <div className="grid grid-cols-2 gap-3 mb-4">
+        <Card className="p-4 bg-card border-border flex flex-col justify-between h-28">
+          <div className="flex justify-between items-start">
+            <Lightbulb className={`w-6 h-6 ${lampOn ? 'text-primary' : 'text-muted-foreground'}`} />
+            <Switch checked={lampOn} onCheckedChange={setLampOn} className="data-[state=checked]:bg-primary data-[state=unchecked]:bg-muted" />
+          </div>
+          <div>
+            <p className="font-medium">Bike Lamp</p>
+            <p className="text-xs text-muted-foreground">{lampOn ? 'On' : 'Off'}</p>
+          </div>
+        </Card>
+        <Card className="p-4 bg-card border-border flex flex-col justify-between h-28">
+          <div className="flex justify-between items-start">
+            <Bell className={`w-6 h-6 ${alarmOn ? 'text-primary' : 'text-muted-foreground'}`} />
+            <Switch checked={alarmOn} onCheckedChange={setAlarmOn} className="data-[state=checked]:bg-primary data-[state=unchecked]:bg-muted" />
+          </div>
+          <div>
+            <p className="font-medium">Bike Alarm</p>
+            <p className="text-xs text-muted-foreground">{alarmOn ? 'On' : 'Off'}</p>
+          </div>
+        </Card>
+      </div>
+
+      {/* Battery & More */}
+      <div className="flex gap-3 items-center">
+        <Card className="flex-[0.7] p-4 bg-card border-border flex items-center gap-3 h-20 relative overflow-hidden">
+          {/* Battery Fill Background */}
+          <div 
+            className="absolute inset-0 bg-primary/20 transition-all duration-300" 
+            style={{ width: `${bikeDevice.battery}%` }}
+          />
+          
+          <Battery className="w-7 h-7 text-primary z-10" />
+          <div className="z-10 flex-1">
+            <p className="text-xs text-muted-foreground">Battery</p>
+            <p className="text-xl font-bold">{bikeDevice.battery}%</p>
+          </div>
+        </Card>
+        
+        <Button 
+          variant="outline" 
+          className="h-20 flex-[0.3] rounded-xl border-border bg-card hover:bg-muted hover:text-primary p-0"
+          onClick={() => setShowBluetooth(true)}
+        >
+          <MoreHorizontal className="w-6 h-6" />
+        </Button>
+      </div>
+
+      {/* Start Ride Button (Bottom) */}
+      <div className="mt-6">
+        <Button 
+          className="w-full h-14 bg-primary text-black hover:bg-primary/90 rounded-xl text-lg font-bold shadow-[0_0_20px_rgba(209,243,73,0.3)]"
+          onClick={() => setShowStartRide(true)}
+        >
+          Start Ride
+        </Button>
+      </div>
+    </div>
+  );
+}
