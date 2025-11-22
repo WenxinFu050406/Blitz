@@ -72,31 +72,31 @@ export function EnergyExchange({ onBack }: EnergyExchangeProps) {
       {onBack && <FixedBackButton onClick={onBack} />}
       
       {/* Header */}
-      <div className="p-5 bg-gradient-to-r from-yellow-400 to-orange-500 text-black">
+      <div className="p-5 bg-black border-b border-[#333]">
         <div className="flex items-center gap-3">
           <div className="flex-1">
-            <h1 className="text-xl">{t.title}</h1>
-            <p className="text-xs opacity-80 mt-0.5">{t.subtitle}</p>
+            <h1 className="text-xl text-white">{t.title}</h1>
+            <p className="text-xs text-gray-400 mt-0.5">{t.subtitle}</p>
           </div>
         </div>
       </div>
 
       {/* Energy Balance */}
       <div className="p-4">
-        <Card className="p-6 bg-gradient-to-br from-yellow-400 to-orange-500 text-black border-0">
+        <Card className="p-6 bg-[#1a1a1a] border border-[#00ff88] text-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm opacity-90">{t.yourEnergyPoints}</p>
               <div className="flex items-baseline gap-2 mt-1">
-                <h1 className="text-4xl">{energyPoints.toLocaleString()}</h1>
-                <Zap className="w-6 h-6" />
+                <h1 className="text-4xl text-[#00ff88]">{energyPoints.toLocaleString()}</h1>
+                <Zap className="w-6 h-6 text-[#00ff88]" />
               </div>
               <p className="text-sm opacity-75 mt-2">
                 {t.earnedFrom} {userStats.totalDistance} km {t.ofRiding}
               </p>
             </div>
-            <div className="w-20 h-20 bg-black/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-              <TrendingUp className="w-10 h-10" />
+            <div className="w-20 h-20 bg-black/40 rounded-full flex items-center justify-center backdrop-blur-sm">
+              <TrendingUp className="w-10 h-10 text-[#00ff88]" />
             </div>
           </div>
         </Card>
@@ -107,19 +107,19 @@ export function EnergyExchange({ onBack }: EnergyExchangeProps) {
         <h3 className="mb-3 text-white">{t.exchangeForBatteries}</h3>
         <div className="space-y-3">
           {batteryPacks.map((pack) => (
-            <Card key={pack.id} className={`p-4 bg-[#1a1a1a] border-[#2a2a2a] hover:shadow-md transition-shadow ${pack.bestValue ? 'border-2 border-orange-300' : ''}`}>
+            <Card key={pack.id} className={`p-4 bg-[#1a1a1a] border-[#2a2a2a] hover:shadow-md transition-shadow ${pack.bestValue ? 'border border-[#00ff88]' : ''}`}>
               <div className="flex items-center gap-4">
-                <div className={`w-16 h-16 bg-gradient-to-br ${pack.color} rounded-xl flex items-center justify-center`}>
-                  <Battery className="w-8 h-8 text-white" />
+                <div className={`w-16 h-16 bg-[#111] rounded-xl flex items-center justify-center border border-[#333]`}>
+                  <Battery className={`w-8 h-8 ${pack.bestValue ? 'text-[#00ff88]' : 'text-white'}`} />
                 </div>
                 <div className="flex-1">
                   <p className="text-white">{pack.name}</p>
                   <p className="text-sm text-gray-400">{pack.description}</p>
                   <div className="flex items-center gap-2 mt-2">
-                    <Zap className="w-4 h-4 text-yellow-500" />
-                    <span className="text-sm">{pack.points.toLocaleString()} {t.points}</span>
+                    <Zap className="w-4 h-4 text-[#00ff88]" />
+                    <span className="text-sm text-[#00ff88]">{pack.points.toLocaleString()} {t.points}</span>
                     {pack.bestValue && (
-                      <Badge className="bg-orange-100 text-orange-700 ml-2">
+                      <Badge className="bg-[#00ff88] text-black ml-2">
                         {t.bestValue}
                       </Badge>
                     )}
@@ -128,7 +128,7 @@ export function EnergyExchange({ onBack }: EnergyExchangeProps) {
                 <button 
                   onClick={() => handleExchange(pack)}
                   disabled={energyPoints < pack.points}
-                  className={`px-4 py-2 bg-gradient-to-r ${pack.buttonColor} text-white rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity`}
+                  className={`px-4 py-2 bg-[#00ff88] text-black rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity disabled:bg-gray-600`}
                 >
                   {t.exchange}
                 </button>
@@ -187,7 +187,7 @@ export function EnergyExchange({ onBack }: EnergyExchangeProps) {
                     <Users className="w-4 h-4" />
                     <span>{project.participants} {t.participants}</span>
                   </div>
-                  <button className="px-4 py-2 bg-gradient-to-r from-[#00ff88] to-[#00cc66] text-black rounded-lg hover:opacity-90">
+                  <button className="px-4 py-2 bg-[#00ff88] text-black rounded-lg hover:opacity-90">
                     {t.donate}
                   </button>
                 </div>
@@ -200,7 +200,7 @@ export function EnergyExchange({ onBack }: EnergyExchangeProps) {
       {/* How to Earn */}
       <div className="p-4 pb-8">
         <h3 className="mb-3 text-white">{t.howToEarn}</h3>
-        <Card className="p-4 bg-gradient-to-br from-[#1a1a1a] to-[#2a2a2a] border-[#2a2a2a]">
+        <Card className="p-4 bg-[#1a1a1a] border-[#2a2a2a]">
           <div className="space-y-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-[#00ff88] rounded-full flex items-center justify-center text-black">
@@ -221,7 +221,7 @@ export function EnergyExchange({ onBack }: EnergyExchangeProps) {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center text-black">
+              <div className="w-10 h-10 bg-[#00ff88] rounded-full flex items-center justify-center text-black">
                 ⭐
               </div>
               <div className="flex-1">
@@ -235,11 +235,11 @@ export function EnergyExchange({ onBack }: EnergyExchangeProps) {
 
       {/* Exchange Confirmation Modal */}
       {showExchangeModal && selectedPack && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setShowExchangeModal(false)}>
+        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4" onClick={() => setShowExchangeModal(false)}>
           <Card className="w-full max-w-md p-6 bg-[#1a1a1a] border-[#2a2a2a]" onClick={(e) => e.stopPropagation()}>
             <div className="text-center">
-              <div className={`w-20 h-20 mx-auto mb-4 bg-gradient-to-br ${selectedPack.color} rounded-full flex items-center justify-center`}>
-                <Battery className="w-10 h-10 text-white" />
+              <div className={`w-20 h-20 mx-auto mb-4 bg-[#111] rounded-full flex items-center justify-center border border-[#00ff88]`}>
+                <Battery className="w-10 h-10 text-[#00ff88]" />
               </div>
               <h3 className="text-base mb-2 text-white">{language === 'zh-CN' ? '确认兑换' : 'Confirm Exchange'}</h3>
               <p className="text-sm text-gray-400 mb-1">{selectedPack.name}</p>
@@ -252,7 +252,7 @@ export function EnergyExchange({ onBack }: EnergyExchangeProps) {
                 </div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-gray-400">{language === 'zh-CN' ? '兑换消耗' : 'Exchange Cost'}</span>
-                  <span className="text-sm text-red-600">-{selectedPack.points.toLocaleString()}</span>
+                  <span className="text-sm text-red-500">-{selectedPack.points.toLocaleString()}</span>
                 </div>
                 <div className="border-t border-[#3a3a3a] pt-2 mt-2">
                   <div className="flex items-center justify-between">
@@ -266,13 +266,13 @@ export function EnergyExchange({ onBack }: EnergyExchangeProps) {
                 <Button
                   onClick={() => setShowExchangeModal(false)}
                   variant="outline"
-                  className="flex-1"
+                  className="flex-1 border-[#333] text-white hover:bg-[#333]"
                 >
                   {language === 'zh-CN' ? '取消' : 'Cancel'}
                 </Button>
                 <Button
                   onClick={confirmExchange}
-                  className="flex-1 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white"
+                  className="flex-1 bg-[#00ff88] hover:bg-[#00cc66] text-black"
                 >
                   {language === 'zh-CN' ? '确认兑换' : 'Confirm'}
                 </Button>

@@ -35,11 +35,11 @@ export function SupplyStations({ onBack }: SupplyStationsProps) {
     : supplyStations.filter(s => s.type === filterType);
 
   return (
-    <div className="flex flex-col h-full bg-white overflow-auto">
+    <div className="flex flex-col h-full bg-black overflow-auto">
       {onBack && <FixedBackButton onClick={onBack} />}
       
       {/* Sponsor Banner */}
-      <div className="bg-gradient-to-r from-orange-500 to-yellow-500 p-4 text-white">
+      <div className="bg-[#1a1a1a] border-b border-[#333] p-4 text-white">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <div className="text-xl">🎉</div>
@@ -51,41 +51,41 @@ export function SupplyStations({ onBack }: SupplyStationsProps) {
         </div>
         <div className="flex gap-3 overflow-x-auto pb-2">
           {/* Sponsor logos */}
-          <div className="flex-shrink-0 w-20 h-12 bg-white/90 rounded flex items-center justify-center">
-            <span className="text-xs text-slate-800">☕ Cafe</span>
+          <div className="flex-shrink-0 w-20 h-12 bg-[#333] rounded flex items-center justify-center">
+            <span className="text-xs text-gray-300">☕ Cafe</span>
           </div>
-          <div className="flex-shrink-0 w-20 h-12 bg-white/90 rounded flex items-center justify-center">
-            <span className="text-xs text-slate-800">🔧 Repair</span>
+          <div className="flex-shrink-0 w-20 h-12 bg-[#333] rounded flex items-center justify-center">
+            <span className="text-xs text-gray-300">🔧 Repair</span>
           </div>
-          <div className="flex-shrink-0 w-20 h-12 bg-white/90 rounded flex items-center justify-center">
-            <span className="text-xs text-slate-800">⚡ Power</span>
+          <div className="flex-shrink-0 w-20 h-12 bg-[#333] rounded flex items-center justify-center">
+            <span className="text-xs text-gray-300">⚡ Power</span>
           </div>
         </div>
       </div>
 
       {/* Header */}
-      <div className="p-5 bg-gradient-to-r from-cyan-500 to-teal-500 text-white">
+      <div className="p-5 bg-black border-b border-[#333] text-white">
         <div className="flex items-center gap-3 mb-3">
           <div className="flex-1">
             <h1 className="text-xl">{t.title}</h1>
             <p className="text-xs opacity-80 mt-0.5">{t.subtitle}</p>
           </div>
         </div>
-        <div className="flex items-center gap-2 text-sm">
+        <div className="flex items-center gap-2 text-sm text-[#00ff88]">
           <MapPin className="w-4 h-4" />
           <span>{filteredStations.length} {t.stationsNearby}</span>
         </div>
       </div>
 
       {/* Filter Tabs */}
-      <div className="p-4 border-b bg-white sticky top-0 z-10">
+      <div className="p-4 border-b border-[#333] bg-black sticky top-0 z-10">
         <div className="flex gap-2 overflow-x-auto pb-2">
           <Badge 
             onClick={() => setFilterType('all')}
             className={`cursor-pointer whitespace-nowrap ${
               filterType === 'all' 
-                ? 'bg-cyan-500 hover:bg-cyan-600 text-white' 
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'bg-[#00ff88] text-black hover:bg-[#00cc66]' 
+                : 'bg-[#1a1a1a] text-gray-400 hover:bg-[#2a2a2a] border border-[#333]'
             }`}
           >
             {t.allStations}
@@ -93,8 +93,8 @@ export function SupplyStations({ onBack }: SupplyStationsProps) {
           <Badge 
             onClick={() => setFilterType('cafe')}
             variant="outline" 
-            className={`cursor-pointer whitespace-nowrap ${
-              filterType === 'cafe' ? 'bg-orange-100 border-orange-500 text-orange-700' : ''
+            className={`cursor-pointer whitespace-nowrap border-[#333] ${
+              filterType === 'cafe' ? 'bg-[#1a1a1a] border-[#00ff88] text-[#00ff88]' : 'text-gray-400 bg-[#1a1a1a]'
             }`}
           >
             <Coffee className="w-3 h-3 mr-1" />
@@ -103,8 +103,8 @@ export function SupplyStations({ onBack }: SupplyStationsProps) {
           <Badge 
             onClick={() => setFilterType('repair')}
             variant="outline" 
-            className={`cursor-pointer whitespace-nowrap ${
-              filterType === 'repair' ? 'bg-slate-100 border-slate-500 text-slate-700' : ''
+            className={`cursor-pointer whitespace-nowrap border-[#333] ${
+              filterType === 'repair' ? 'bg-[#1a1a1a] border-[#00ff88] text-[#00ff88]' : 'text-gray-400 bg-[#1a1a1a]'
             }`}
           >
             <Wrench className="w-3 h-3 mr-1" />
@@ -113,8 +113,8 @@ export function SupplyStations({ onBack }: SupplyStationsProps) {
           <Badge 
             onClick={() => setFilterType('charging')}
             variant="outline" 
-            className={`cursor-pointer whitespace-nowrap ${
-              filterType === 'charging' ? 'bg-yellow-100 border-yellow-500 text-yellow-700' : ''
+            className={`cursor-pointer whitespace-nowrap border-[#333] ${
+              filterType === 'charging' ? 'bg-[#1a1a1a] border-[#00ff88] text-[#00ff88]' : 'text-gray-400 bg-[#1a1a1a]'
             }`}
           >
             <Zap className="w-3 h-3 mr-1" />
@@ -132,7 +132,7 @@ export function SupplyStations({ onBack }: SupplyStationsProps) {
           return (
             <Card 
               key={station.id} 
-              className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+              className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer bg-[#1a1a1a] border-[#2a2a2a] text-white"
               onClick={() => setSelectedStation(station)}
             >
               {/* Image */}
@@ -143,14 +143,14 @@ export function SupplyStations({ onBack }: SupplyStationsProps) {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute top-3 left-3">
-                  <div className={`px-3 py-1 rounded-full bg-gradient-to-r ${typeConfig.color} text-white flex items-center gap-2 shadow-md`}>
+                  <div className={`px-3 py-1 rounded-full bg-black/80 text-[#00ff88] flex items-center gap-2 shadow-md border border-[#00ff88]`}>
                     <Icon className="w-4 h-4" />
                     <span className="text-sm">{t[station.type] || typeConfig.label}</span>
                   </div>
                 </div>
                 <div className="absolute top-3 right-3">
-                  <div className="px-3 py-1 rounded-full bg-white/90 backdrop-blur-sm flex items-center gap-1 shadow-md">
-                    <MapPin className="w-3 h-3 text-cyan-600" />
+                  <div className="px-3 py-1 rounded-full bg-black/80 backdrop-blur-sm flex items-center gap-1 shadow-md text-white">
+                    <MapPin className="w-3 h-3 text-[#00ff88]" />
                     <span className="text-sm">{station.distance}</span>
                   </div>
                 </div>
@@ -161,25 +161,25 @@ export function SupplyStations({ onBack }: SupplyStationsProps) {
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex-1">
                     <h3>{t[station.id] || station.name}</h3>
-                    <p className="text-sm text-slate-600 mt-1">{station.address}</p>
+                    <p className="text-sm text-gray-400 mt-1">{station.address}</p>
                   </div>
                   <div className="flex items-center gap-1 ml-3">
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    <Star className="w-4 h-4 fill-[#00ff88] text-[#00ff88]" />
                     <span>{station.rating}</span>
                   </div>
                 </div>
 
                 {/* Supplies */}
                 <div className="mb-4">
-                  <p className="text-sm text-slate-600 mb-2">{t.availableSupplies}</p>
+                  <p className="text-sm text-gray-400 mb-2">{t.availableSupplies}</p>
                   <div className="flex flex-wrap gap-2">
                     {station.supplies.slice(0, 3).map((supply) => (
-                      <Badge key={supply} variant="outline" className="bg-slate-50">
+                      <Badge key={supply} variant="outline" className="bg-[#111] border-[#333] text-gray-300">
                         {t[supply.toLowerCase().replace(/\s+/g, '')] || supply}
                       </Badge>
                     ))}
                     {station.supplies.length > 3 && (
-                      <Badge variant="outline" className="bg-slate-50">
+                      <Badge variant="outline" className="bg-[#111] border-[#333] text-gray-300">
                         +{station.supplies.length - 3}
                       </Badge>
                     )}
@@ -188,11 +188,11 @@ export function SupplyStations({ onBack }: SupplyStationsProps) {
 
                 {/* Actions */}
                 <div className="flex gap-2">
-                  <button className="flex-1 px-4 py-2 bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-lg hover:from-cyan-600 hover:to-teal-600 flex items-center justify-center gap-2">
+                  <button className="flex-1 px-4 py-2 bg-[#00ff88] text-black rounded-lg hover:bg-[#00cc66] flex items-center justify-center gap-2">
                     <Navigation2 className="w-4 h-4" />
                     {t.navigate}
                   </button>
-                  <button className="px-4 py-2 border-2 border-slate-200 rounded-lg hover:bg-slate-50 flex items-center gap-2">
+                  <button className="px-4 py-2 border border-[#333] rounded-lg hover:bg-[#2a2a2a] flex items-center gap-2 text-white">
                     <Phone className="w-4 h-4" />
                     {t.call}
                   </button>
@@ -205,26 +205,26 @@ export function SupplyStations({ onBack }: SupplyStationsProps) {
 
       {/* Info Card */}
       <div className="p-4 pb-8">
-        <Card className="p-6 bg-gradient-to-br from-cyan-50 to-teal-50 border-cyan-200">
-          <h3 className="mb-3">{t.besvPartnerNetwork}</h3>
-          <p className="text-sm text-slate-600 mb-4">
+        <Card className="p-6 bg-[#1a1a1a] border border-[#00ff88]">
+          <h3 className="mb-3 text-white">{t.besvPartnerNetwork}</h3>
+          <p className="text-sm text-gray-400 mb-4">
             {t.partnerDesc}
           </p>
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm">
-              <div className="w-6 h-6 bg-cyan-500 rounded-full flex items-center justify-center text-white">
+            <div className="flex items-center gap-2 text-sm text-white">
+              <div className="w-6 h-6 bg-[#00ff88] rounded-full flex items-center justify-center text-black">
                 ✓
               </div>
               <span>{t.discount10}</span>
             </div>
-            <div className="flex items-center gap-2 text-sm">
-              <div className="w-6 h-6 bg-cyan-500 rounded-full flex items-center justify-center text-white">
+            <div className="flex items-center gap-2 text-sm text-white">
+              <div className="w-6 h-6 bg-[#00ff88] rounded-full flex items-center justify-center text-black">
                 ✓
               </div>
               <span>{t.freeCheckup}</span>
             </div>
-            <div className="flex items-center gap-2 text-sm">
-              <div className="w-6 h-6 bg-cyan-500 rounded-full flex items-center justify-center text-white">
+            <div className="flex items-center gap-2 text-sm text-white">
+              <div className="w-6 h-6 bg-[#00ff88] rounded-full flex items-center justify-center text-black">
                 ✓
               </div>
               <span>{t.priorityCharging}</span>

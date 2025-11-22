@@ -74,21 +74,23 @@ export function StartRide({ onBack }: StartRideProps) {
       </div>
 
       {/* Map Placeholder */}
-      <div className="flex-1 bg-secondary relative">
-        <div className="absolute inset-0 flex items-center justify-center bg-[#1a1a1a]">
-            {/* Simulate Dark Mode Map */}
-            <div className="absolute inset-0 opacity-20" 
-                 style={{ 
-                     backgroundImage: 'radial-gradient(#333 1px, transparent 1px)', 
-                     backgroundSize: '20px 20px' 
-                 }} 
-            />
-          <div className="text-center relative z-10">
-            <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
-              <MapPin className="w-10 h-10 text-primary" />
-            </div>
-            <p className="text-sm text-muted-foreground">Live map tracking</p>
-            <p className="text-xs text-muted-foreground mt-1">GPS location enabled</p>
+      <div className="flex-1 bg-secondary relative overflow-hidden">
+        <div className="absolute inset-0">
+          <iframe 
+            width="100%" 
+            height="100%" 
+            frameBorder="0" 
+            scrolling="no" 
+            marginHeight={0} 
+            marginWidth={0} 
+            src="https://www.openstreetmap.org/export/embed.html?bbox=-0.15,51.5,-0.1,51.51&layer=mapnik" 
+            style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg)' }} 
+          ></iframe>
+          
+          {/* Overlay for tracking info */}
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md px-4 py-2 rounded-full flex items-center gap-2 z-10 border border-primary/20">
+            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            <p className="text-xs text-white font-medium">GPS Signal Strong</p>
           </div>
         </div>
 

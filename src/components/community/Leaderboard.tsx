@@ -198,21 +198,21 @@ export function Leaderboard({ onBack }: LeaderboardProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full bg-black">
       {/* Fixed Header */}
-      <div className="sticky top-0 z-10 bg-white border-b border-slate-100 shadow-sm">
+      <div className="sticky top-0 z-10 bg-black border-b border-[#333] shadow-sm">
         <div className="flex items-center gap-3 p-4">
           <button
             onClick={onBack}
-            className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
+            className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#1a1a1a] transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-slate-700" />
+            <ArrowLeft className="w-5 h-5 text-white" />
           </button>
           <div className="flex-1">
-            <h2 className="text-base text-slate-800">
+            <h2 className="text-base text-white">
               {t.leaderboard}
             </h2>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-gray-400">
               {language === "zh-CN"
                 ? "查看骑手排名"
                 : "View rider rankings"}
@@ -223,7 +223,7 @@ export function Leaderboard({ onBack }: LeaderboardProps) {
 
         {/* Scope Selector */}
         <div className="px-4 pb-3">
-          <p className="text-xs text-slate-600 mb-2">
+          <p className="text-xs text-gray-400 mb-2">
             {t.rankingScope}
           </p>
           <div className="flex gap-2">
@@ -235,8 +235,8 @@ export function Leaderboard({ onBack }: LeaderboardProps) {
                 }
                 className={`flex-1 py-2 px-3 rounded-lg text-sm transition-all flex items-center justify-center gap-1.5 ${
                   scope === s.id
-                    ? "bg-gradient-to-r from-cyan-500 to-teal-500 text-white shadow-md"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    ? "bg-[#00ff88] text-black shadow-md"
+                    : "bg-[#1a1a1a] text-gray-400 hover:bg-[#2a2a2a] border border-[#333]"
                 }`}
               >
                 <span>{s.icon}</span>
@@ -248,7 +248,7 @@ export function Leaderboard({ onBack }: LeaderboardProps) {
 
         {/* Category Selector */}
         <div className="px-4 pb-4">
-          <p className="text-xs text-slate-600 mb-2">
+          <p className="text-xs text-gray-400 mb-2">
             {t.rankingCategory}
           </p>
           <div className="grid grid-cols-2 gap-2">
@@ -264,8 +264,8 @@ export function Leaderboard({ onBack }: LeaderboardProps) {
                   }
                   className={`py-2 px-3 rounded-lg text-sm transition-all flex items-center justify-center gap-2 ${
                     category === cat.id
-                      ? `bg-gradient-to-r ${cat.color} text-white shadow-md`
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      ? `bg-[#1a1a1a] border border-[#00ff88] text-[#00ff88] shadow-md`
+                      : "bg-[#1a1a1a] text-gray-400 hover:bg-[#2a2a2a] border border-[#333]"
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -278,31 +278,31 @@ export function Leaderboard({ onBack }: LeaderboardProps) {
       </div>
 
       {/* Leaderboard List */}
-      <div className="flex-1 overflow-auto p-4 space-y-2">
+      <div className="flex-1 overflow-auto p-4 space-y-2 bg-black">
         {leaderboard.map((entry, index) => {
           const isCurrentUser =
             entry.name === currentUser?.name;
           return (
             <Card
               key={entry.id}
-              className={`p-4 border shadow-sm transition-all ${
+              className={`p-4 border transition-all bg-[#1a1a1a] ${
                 isCurrentUser
-                  ? "border-cyan-500 bg-cyan-50/50"
-                  : "border-slate-100 hover:shadow-md"
+                  ? "border-[#00ff88] bg-[#1a1a1a]/80"
+                  : "border-[#333] hover:shadow-md"
               }`}
             >
               <div className="flex items-center gap-3">
                 {/* Rank Badge */}
                 <div
-                  className={`w-12 h-12 rounded-lg bg-gradient-to-br ${getRankColor(entry.rank)} flex items-center justify-center shadow-sm`}
+                  className={`w-12 h-12 rounded-lg bg-gradient-to-br ${getRankColor(entry.rank)} flex items-center justify-center shadow-sm border border-black/20 text-black`}
                 >
-                  <span className="text-white">
+                  <span className="text-lg">
                     {getRankEmoji(entry.rank)}
                   </span>
                 </div>
 
                 {/* Avatar */}
-                <div className="w-10 h-10 rounded-full overflow-hidden bg-slate-100">
+                <div className="w-10 h-10 rounded-full overflow-hidden bg-black">
                   <img
                     src={entry.avatar}
                     alt={entry.name}
@@ -313,26 +313,26 @@ export function Leaderboard({ onBack }: LeaderboardProps) {
                 {/* Info */}
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <h4 className="text-sm text-slate-800">
+                    <h4 className={`text-sm ${isCurrentUser ? 'text-[#00ff88]' : 'text-white'}`}>
                       {entry.name}
                     </h4>
                     {isCurrentUser && (
-                      <Badge className="bg-cyan-500 text-white text-xs h-5 px-1.5">
+                      <Badge className="bg-[#00ff88] text-black text-xs h-5 px-1.5">
                         {t.you}
                       </Badge>
                     )}
                   </div>
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <p className="text-xs text-gray-400 mt-0.5">
                     {entry.location}
                   </p>
                 </div>
 
                 {/* Value */}
                 <div className="text-right">
-                  <p className="text-base text-slate-800">
+                  <p className="text-base text-white font-mono">
                     {entry.value.toLocaleString()}
                   </p>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-gray-400">
                     {entry.unit}
                   </p>
                 </div>
@@ -346,15 +346,15 @@ export function Leaderboard({ onBack }: LeaderboardProps) {
       {!leaderboard.some(
         (entry) => entry.name === currentUser?.name,
       ) && (
-        <div className="p-4 border-t border-slate-100 bg-slate-50">
-          <Card className="p-4 border-cyan-500 bg-cyan-50/50 border shadow-sm">
+        <div className="p-4 border-t border-[#333] bg-black">
+          <Card className="p-4 border-[#00ff88] bg-[#1a1a1a] shadow-sm">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center shadow-sm">
-                <span className="text-slate-700">
+              <div className="w-12 h-12 rounded-lg bg-[#2a2a2a] flex items-center justify-center shadow-sm border border-[#333]">
+                <span className="text-gray-300">
                   #{Math.floor(Math.random() * 50) + 20}
                 </span>
               </div>
-              <div className="w-10 h-10 rounded-full overflow-hidden bg-slate-100">
+              <div className="w-10 h-10 rounded-full overflow-hidden bg-black">
                 <img
                   src={currentUser?.avatar}
                   alt={currentUser?.name}
@@ -363,22 +363,22 @@ export function Leaderboard({ onBack }: LeaderboardProps) {
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <h4 className="text-sm text-slate-800">
+                  <h4 className="text-sm text-[#00ff88]">
                     {currentUser?.name}
                   </h4>
-                  <Badge className="bg-cyan-500 text-white text-xs h-5 px-1.5">
+                  <Badge className="bg-[#00ff88] text-black text-xs h-5 px-1.5">
                     {t.you}
                   </Badge>
                 </div>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-gray-400 mt-0.5">
                   {currentUser?.location}
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-base text-slate-800">
+                <p className="text-base text-white">
                   {Math.floor(Math.random() * 200) + 50}
                 </p>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-gray-400">
                   {category === "distance" && "km"}
                   {category === "carbon" && "kg CO₂"}
                   {category === "energy" && "pts"}

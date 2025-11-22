@@ -27,14 +27,14 @@ export function CityCheckIn({ onBack }: CityCheckInProps) {
       {onBack && <FixedBackButton onClick={onBack} />}
       
       {/* Header */}
-      <div className="p-5 bg-gradient-to-r from-[#00ff88] to-[#00cc66] text-black">
+      <div className="p-5 bg-black border-b border-[#333]">
         <div className="flex items-center gap-3 mb-3">
           <div className="flex-1">
-            <h1 className="text-xl">{t.title}</h1>
-            <p className="text-xs opacity-80 mt-0.5">{t.subtitle}</p>
+            <h1 className="text-xl text-white">{t.title}</h1>
+            <p className="text-xs text-gray-400 mt-0.5">{t.subtitle}</p>
           </div>
         </div>
-        <div className="flex items-center gap-2 text-sm">
+        <div className="flex items-center gap-2 text-sm text-[#00ff88]">
           <Gift className="w-4 h-4" />
           <span>3 {t.landmarksVisited} • 100 {t.pointsEarned}</span>
         </div>
@@ -42,19 +42,19 @@ export function CityCheckIn({ onBack }: CityCheckInProps) {
 
       {/* Progress */}
       <div className="p-4">
-        <Card className="p-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-black border-0 shadow-sm">
+        <Card className="p-4 bg-[#1a1a1a] border border-[#00ff88] text-white shadow-sm">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm opacity-90">{t.totalPoints}</p>
-              <h2 className="text-3xl mt-1">100</h2>
+              <h2 className="text-3xl mt-1 text-[#00ff88]">100</h2>
             </div>
             <div className="text-right">
               <p className="text-sm opacity-90">{t.nextReward}</p>
-              <p className="text-sm mt-1">50 {t.pointsToGo}</p>
+              <p className="text-sm mt-1 text-[#00ff88]">50 {t.pointsToGo}</p>
             </div>
           </div>
-          <div className="mt-4 h-2 bg-black/30 rounded-full overflow-hidden">
-            <div className="h-full bg-black rounded-full" style={{ width: '67%' }} />
+          <div className="mt-4 h-2 bg-black rounded-full overflow-hidden">
+            <div className="h-full bg-[#00ff88] rounded-full" style={{ width: '67%' }} />
           </div>
         </Card>
       </div>
@@ -95,18 +95,18 @@ export function CityCheckIn({ onBack }: CityCheckInProps) {
               </div>
               <div className="flex items-center justify-between mt-4">
                 <div className="flex items-center gap-4">
-                  <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200">
+                  <Badge className="bg-[#00ff88] text-black hover:bg-[#00cc66]">
                     +{landmark.points} {language === 'zh-CN' ? '点数' : 'points'}
                   </Badge>
-                  <Badge variant="outline">{landmark.reward}</Badge>
+                  <Badge variant="outline" className="text-white border-white/20">{landmark.reward}</Badge>
                 </div>
                 {!landmark.visited ? (
-                  <button className="px-4 py-2 bg-gradient-to-r from-[#00ff88] to-[#00cc66] text-black rounded-lg hover:opacity-90 flex items-center gap-2">
+                  <button className="px-4 py-2 bg-[#00ff88] text-black rounded-lg hover:opacity-90 flex items-center gap-2">
                     <Navigation2 className="w-4 h-4" />
                     {t.viewRoute}
                   </button>
                 ) : (
-                  <Badge className="bg-green-100 text-green-800">
+                  <Badge className="bg-[#1a1a1a] text-[#00ff88] border border-[#00ff88]">
                     ✓ {t.visited}
                   </Badge>
                 )}
@@ -121,26 +121,26 @@ export function CityCheckIn({ onBack }: CityCheckInProps) {
         <h3 className="mb-4 text-white">{t.availableRewards}</h3>
         <div className="space-y-3">
           <Card className="p-4 bg-[#1a1a1a] border-[#2a2a2a] flex items-center gap-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center text-2xl">
+            <div className="w-12 h-12 bg-[#00ff88]/20 rounded-lg flex items-center justify-center text-2xl text-[#00ff88]">
               🎁
             </div>
             <div className="flex-1">
               <p className="text-white">{t.freeCoffee}</p>
               <p className="text-sm text-gray-400">150 {t.pointsRequired}</p>
             </div>
-            <button className="px-4 py-2 border-2 border-[#2a2a2a] rounded-lg hover:bg-[#2a2a2a]">
+            <button className="px-4 py-2 border-2 border-[#2a2a2a] rounded-lg hover:bg-[#2a2a2a] text-white">
               {t.claim}
             </button>
           </Card>
           <Card className="p-4 bg-[#1a1a1a] border-[#2a2a2a] flex items-center gap-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-teal-500 rounded-lg flex items-center justify-center text-2xl">
+            <div className="w-12 h-12 bg-[#00ff88]/20 rounded-lg flex items-center justify-center text-2xl text-[#00ff88]">
               🏅
             </div>
             <div className="flex-1">
               <p className="text-white">{t.cityExplorerBadge}</p>
               <p className="text-sm text-gray-400">{t.visitAllLandmarks}</p>
             </div>
-            <Badge variant="outline">{t.inProgress}</Badge>
+            <Badge variant="outline" className="text-white border-white/20">{t.inProgress}</Badge>
           </Card>
         </div>
       </div>

@@ -23,46 +23,46 @@ export function Notifications({ onBack }: NotificationsProps) {
   const getIcon = (type: string) => {
     switch (type) {
       case 'like': return <Heart className="w-4 h-4 text-red-500" />;
-      case 'comment': return <MessageCircle className="w-4 h-4 text-cyan-500" />;
-      case 'friend': return <UserPlus className="w-4 h-4 text-green-500" />;
+      case 'comment': return <MessageCircle className="w-4 h-4 text-[#00ff88]" />;
+      case 'friend': return <UserPlus className="w-4 h-4 text-[#00ff88]" />;
       case 'achievement': return <Award className="w-4 h-4 text-yellow-500" />;
-      default: return <Bell className="w-4 h-4 text-slate-500" />;
+      default: return <Bell className="w-4 h-4 text-gray-500" />;
     }
   };
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full bg-black text-white">
       {/* Header */}
-      <div className="flex items-center gap-3 p-4 border-b border-slate-100 bg-gradient-to-r from-orange-500 to-red-500 text-white">
+      <div className="flex items-center gap-3 p-4 border-b border-[#333] bg-black">
         <button
           onClick={onBack}
-          className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white/20 transition-colors"
+          className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#1a1a1a] transition-colors"
         >
-          <ArrowLeft className="w-5 h-5" />
+          <ArrowLeft className="w-5 h-5 text-white" />
         </button>
         <div className="flex-1">
-          <h2 className="text-base">Notifications</h2>
-          <p className="text-xs opacity-90 mt-0.5">{unreadCount} unread</p>
+          <h2 className="text-base text-white">Notifications</h2>
+          <p className="text-xs text-gray-400 mt-0.5">{unreadCount} unread</p>
         </div>
-        <Bell className="w-6 h-6" />
+        <Bell className="w-6 h-6 text-[#00ff88]" />
       </div>
 
       {/* Notifications List */}
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto bg-black">
         {notifications.map((notification) => (
           <div
             key={notification.id}
-            className={`p-4 border-b border-slate-100 hover:bg-slate-50 transition-colors ${
-              notification.unread ? 'bg-cyan-50/50' : ''
+            className={`p-4 border-b border-[#2a2a2a] hover:bg-[#1a1a1a] transition-colors ${
+              notification.unread ? 'bg-[#1a1a1a]/50 border-l-2 border-l-[#00ff88]' : ''
             }`}
           >
             <div className="flex items-start gap-3">
               {notification.type === 'achievement' ? (
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
-                  <Award className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 rounded-full bg-[#1a1a1a] border border-[#00ff88] flex items-center justify-center flex-shrink-0">
+                  <Award className="w-5 h-5 text-[#00ff88]" />
                 </div>
               ) : (
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-300 to-slate-400 flex items-center justify-center text-lg flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-[#1a1a1a] border border-[#333] flex items-center justify-center text-lg flex-shrink-0">
                   {notification.avatar}
                 </div>
               )}
@@ -71,18 +71,18 @@ export function Notifications({ onBack }: NotificationsProps) {
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1">
                     {notification.user && (
-                      <span className="text-sm">{notification.user} </span>
+                      <span className="text-sm text-white">{notification.user} </span>
                     )}
-                    <span className="text-sm text-slate-600">{notification.message}</span>
+                    <span className="text-sm text-gray-400">{notification.message}</span>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
                     {notification.unread && (
-                      <div className="w-2 h-2 bg-cyan-500 rounded-full" />
+                      <div className="w-2 h-2 bg-[#00ff88] rounded-full" />
                     )}
                     {getIcon(notification.type)}
                   </div>
                 </div>
-                <p className="text-xs text-slate-400 mt-1">{notification.time}</p>
+                <p className="text-xs text-gray-500 mt-1">{notification.time}</p>
               </div>
             </div>
           </div>
@@ -90,8 +90,8 @@ export function Notifications({ onBack }: NotificationsProps) {
       </div>
 
       {/* Mark All as Read */}
-      <div className="p-4 border-t border-slate-100">
-        <button className="w-full py-2.5 text-sm text-cyan-600 hover:bg-cyan-50 rounded-lg transition-colors">
+      <div className="p-4 border-t border-[#333] bg-black">
+        <button className="w-full py-2.5 text-sm text-[#00ff88] hover:bg-[#1a1a1a] rounded-lg transition-colors">
           Mark all as read
         </button>
       </div>

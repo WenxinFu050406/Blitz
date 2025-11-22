@@ -48,6 +48,7 @@ app.post("/make-server-8ab7634a/signup", async (c) => {
     const authData: any = {
       password,
       email_confirm: true,
+      phone_confirm: true,
       user_metadata: { username, avatar, contactType }
     };
 
@@ -541,7 +542,6 @@ app.post("/make-server-8ab7634a/posts", async (c) => {
       userName: userProfile.username || userProfile.name,
       userAvatar: userProfile.avatar,
       userLocation: userProfile.location || 'Unknown Location',
-      userLocation: userProfile.location || 'Unknown Location',
       content: content.trim(),
       image: image || null,
       likes: 0,
@@ -970,198 +970,6 @@ app.delete("/make-server-8ab7634a/posts/:postId/comments/:commentId", async (c) 
   } catch (error) {
     console.log('Delete comment error:', error);
     return c.json({ error: 'Internal server error' }, { status: 500 });
-  }
-});
-
-// Get Specific User Profile (Public)
-app.get("/make-server-8ab7634a/users/:userId/profile", async (c) => {
-  try {
-    const accessToken = c.req.header('Authorization')?.split(' ')[1];
-    
-    // Optional auth check to see if current user is following
-    let currentUserId = null;
-    if (accessToken) {
-      const { data: { user } } = await supabaseAdmin.auth.getUser(accessToken);
-      if (user) currentUserId = user.id;
-    }
-
-    const targetUserId = c.req.param('userId');
-
-    // Get user profile and stats
-    const userProfile = await kv.get(`user:${targetUserId}:profile`);
-    const userStats = await kv.get(`user:${targetUserId}:stats`);
-
-    if (!userProfile) {
-      return c.json({ error: 'User not found' }, { status: 404 });
-    }
-
-    // Check if following
-    let isFollowing = false;
-    if (currentUserId) {
-      const following = await kv.get(`user:${currentUserId}:following`) || [];
-      isFollowing = following.includes(targetUserId);
-    }
-
-    return c.json({ 
-      success: true, 
-      user: { 
-        ...userProfile, 
-        ...userStats,
-        isFriend: isFollowing // reuse isFriend property for following status
-      }
-    });
-
-  } catch (error) {
-    console.log('User profile fetch error:', error);
-    return c.json({ error: 'Internal server error while fetching user profile' }, { status: 500 });
-  }
-});
-
-// Follow a user
-app.post("/make-server-8ab7634a/users/:userId/follow", async (c) => {
-  try {
-    const accessToken = c.req.header('Authorization')?.split(' ')[1];
-    
-    if (!accessToken) {
-      return c.json({ error: 'No access token provided' }, { status: 401 });
-    }
-
-    const { data: { user }, error } = await supabaseAdmin.auth.getUser(accessToken);
-
-    if (error || !user) {
-      return c.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const currentUserId = user.id;
-    const targetUserId = c.req.param('userId');
-
-    if (currentUserId === targetUserId) {
-      return c.json({ error: 'Cannot follow yourself' }, { status: 400 });
-    }
-
-    // Update following list for current user
-    let following = await kv.get(`user:${currentUserId}:following`) || [];
-    if (!following.includes(targetUserId)) {
-      following.push(targetUserId);
-      await kv.set(`user:${currentUserId}:following`, following);
-      
-      // Update followers list for target user
-      let followers = await kv.get(`user:${targetUserId}:followers`) || [];
-      if (!followers.includes(currentUserId)) {
-        followers.push(currentUserId);
-        await kv.set(`user:${targetUserId}:followers`, followers);
-      }
-
-      // Update stats
-      const currentUserStats = await kv.get(`user:${currentUserId}:stats`);
-      if (currentUserStats) {
-        currentUserStats.friendsCount = (currentUserStats.friendsCount || 0) + 1;
-        await kv.set(`user:${currentUserId}:stats`, currentUserStats);
-      }
-
-      const targetUserStats = await kv.get(`user:${targetUserId}:stats`);
-      if (targetUserStats) {
-         // We might want to track followers count separately, but for now re-using friendsCount or we can add followersCount
-         // Let's assume friendsCount is basically following count for the user, but for the target it's followers.
-         // To be safe and consistent with existing UI, let's just increment friendsCount for both or maybe not touch target stats if it means "Following".
-         // If "friendsCount" means "Following", we only update current user.
-         // If it means "Friends" (mutual), we update both.
-         // Given the UI shows "Friends", let's stick to updating current user's "friendsCount" to represent "Following" count.
-      }
-    }
-
-    return c.json({ success: true });
-
-  } catch (error) {
-    console.log('Follow user error:', error);
-    return c.json({ error: 'Internal server error while following user' }, { status: 500 });
-  }
-});
-
-// Unfollow a user
-app.delete("/make-server-8ab7634a/users/:userId/follow", async (c) => {
-  try {
-    const accessToken = c.req.header('Authorization')?.split(' ')[1];
-    
-    if (!accessToken) {
-      return c.json({ error: 'No access token provided' }, { status: 401 });
-    }
-
-    const { data: { user }, error } = await supabaseAdmin.auth.getUser(accessToken);
-
-    if (error || !user) {
-      return c.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const currentUserId = user.id;
-    const targetUserId = c.req.param('userId');
-
-    // Update following list for current user
-    let following = await kv.get(`user:${currentUserId}:following`) || [];
-    if (following.includes(targetUserId)) {
-      following = following.filter((id: string) => id !== targetUserId);
-      await kv.set(`user:${currentUserId}:following`, following);
-      
-      // Update followers list for target user
-      let followers = await kv.get(`user:${targetUserId}:followers`) || [];
-      followers = followers.filter((id: string) => id !== currentUserId);
-      await kv.set(`user:${targetUserId}:followers`, followers);
-
-       // Update stats
-      const currentUserStats = await kv.get(`user:${currentUserId}:stats`);
-      if (currentUserStats && currentUserStats.friendsCount > 0) {
-        currentUserStats.friendsCount--;
-        await kv.set(`user:${currentUserId}:stats`, currentUserStats);
-      }
-    }
-
-    return c.json({ success: true });
-
-  } catch (error) {
-    console.log('Unfollow user error:', error);
-    return c.json({ error: 'Internal server error while unfollowing user' }, { status: 500 });
-  }
-});
-
-// Get Followed Users (Friends)
-app.get("/make-server-8ab7634a/user/following", async (c) => {
-  try {
-    const accessToken = c.req.header('Authorization')?.split(' ')[1];
-    
-    if (!accessToken) {
-      return c.json({ error: 'No access token provided' }, { status: 401 });
-    }
-
-    const { data: { user }, error } = await supabaseAdmin.auth.getUser(accessToken);
-
-    if (error || !user) {
-      return c.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const currentUserId = user.id;
-    const followingIds = await kv.get(`user:${currentUserId}:following`) || [];
-    
-    const users = [];
-    for (const id of followingIds) {
-        const profile = await kv.get(`user:${id}:profile`);
-        const stats = await kv.get(`user:${id}:stats`);
-        if (profile) {
-            users.push({
-                ...profile,
-                ...stats,
-                isFriend: true // Since we are fetching following list
-            });
-        }
-    }
-
-    return c.json({ 
-      success: true, 
-      users
-    });
-
-  } catch (error) {
-    console.log('Get following error:', error);
-    return c.json({ error: 'Internal server error while fetching following' }, { status: 500 });
   }
 });
 

@@ -6,7 +6,7 @@ import { FixedBackButton } from '../ui/FixedBackButton';
 import { useLanguage } from '../../context/LanguageContext';
 import { Progress } from '../ui/progress';
 
-interface BluetoothDevice {
+export interface BluetoothDevice {
   id: string;
   name: string;
   model: string;
@@ -17,12 +17,14 @@ interface BluetoothDevice {
 
 interface BluetoothConnectProps {
   onBack: () => void;
+  connectedDevice: BluetoothDevice | null;
+  setConnectedDevice: (device: BluetoothDevice | null) => void;
 }
 
-export function BluetoothConnect({ onBack }: BluetoothConnectProps) {
+export function BluetoothConnect({ onBack, connectedDevice, setConnectedDevice }: BluetoothConnectProps) {
   const { language } = useLanguage();
   const [scanning, setScanning] = useState(false);
-  const [connectedDevice, setConnectedDevice] = useState<BluetoothDevice | null>(null);
+  // const [connectedDevice, setConnectedDevice] = useState<BluetoothDevice | null>(null); // Moved to parent
   const [availableDevices, setAvailableDevices] = useState<BluetoothDevice[]>([]);
 
   const t = {
@@ -74,17 +76,7 @@ export function BluetoothConnect({ onBack }: BluetoothConnectProps) {
 
   const text = t[language];
 
-  useEffect(() => {
-    // Simulate already connected device
-    setConnectedDevice({
-      id: 'BESV-001',
-      name: 'BESV JF1',
-      model: 'JF1 Carbon',
-      battery: 87,
-      signal: 95,
-      connected: true,
-    });
-  }, []);
+  // useEffect removed - connection state managed by parent
 
   const handleScan = () => {
     setScanning(true);
@@ -135,15 +127,15 @@ export function BluetoothConnect({ onBack }: BluetoothConnectProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full bg-black text-white">
       <FixedBackButton onClick={onBack} />
       
       {/* Header */}
-      <div className="p-5 pt-0 bg-gradient-to-r from-cyan-500 to-teal-500 text-white">
+      <div className="p-5 pt-0 bg-black text-white">
         <div className="flex items-center gap-3 mb-2">
           <Bluetooth className="w-6 h-6" />
           <div>
-            <h1 className="text-xl">{text.title}</h1>
+            <h1 className="text-xl font-bold">{text.title}</h1>
             <p className="text-xs opacity-80 mt-0.5">{text.subtitle}</p>
           </div>
         </div>
@@ -153,21 +145,21 @@ export function BluetoothConnect({ onBack }: BluetoothConnectProps) {
         {/* Connected Device */}
         {connectedDevice && (
           <div>
-            <h3 className="text-sm text-slate-600 mb-3">{text.connectedDevice}</h3>
-            <Card className="p-4 border-2 border-green-500 bg-green-50/50">
+            <h3 className="text-sm text-zinc-400 mb-3">{text.connectedDevice}</h3>
+            <Card className="p-4 border border-green-500/50 bg-zinc-900/50">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-teal-500 rounded-lg flex items-center justify-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-green-700 rounded-lg flex items-center justify-center">
                     <Bluetooth className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h4 className="text-base text-slate-800">{connectedDevice.name}</h4>
-                    <p className="text-xs text-slate-500">{connectedDevice.model}</p>
+                    <h4 className="text-base text-white font-medium">{connectedDevice.name}</h4>
+                    <p className="text-xs text-zinc-400">{connectedDevice.model}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-1 text-green-600">
+                <div className="flex items-center gap-1 text-green-500">
                   <Check className="w-4 h-4" />
-                  <span className="text-xs">{text.connected}</span>
+                  <span className="text-xs font-medium">{text.connected}</span>
                 </div>
               </div>
 
@@ -176,44 +168,44 @@ export function BluetoothConnect({ onBack }: BluetoothConnectProps) {
                 <div>
                   <div className="flex items-center justify-between text-sm mb-1">
                     <div className="flex items-center gap-2">
-                      <Battery className="w-4 h-4 text-slate-600" />
-                      <span className="text-slate-600">{text.battery}</span>
+                      <Battery className="w-4 h-4 text-zinc-400" />
+                      <span className="text-zinc-400">{text.battery}</span>
                     </div>
-                    <span className="text-slate-800">{connectedDevice.battery}%</span>
+                    <span className="text-white font-medium">{connectedDevice.battery}%</span>
                   </div>
-                  <Progress value={connectedDevice.battery} className="h-1.5" />
+                  <Progress value={connectedDevice.battery} className="h-1.5 bg-zinc-800" indicatorClassName="bg-green-500" />
                 </div>
 
                 <div>
                   <div className="flex items-center justify-between text-sm mb-1">
                     <div className="flex items-center gap-2">
-                      <Signal className="w-4 h-4 text-slate-600" />
-                      <span className="text-slate-600">{text.signal}</span>
+                      <Signal className="w-4 h-4 text-zinc-400" />
+                      <span className="text-zinc-400">{text.signal}</span>
                     </div>
-                    <span className="text-slate-800">{connectedDevice.signal}%</span>
+                    <span className="text-white font-medium">{connectedDevice.signal}%</span>
                   </div>
-                  <Progress value={connectedDevice.signal} className="h-1.5" />
+                  <Progress value={connectedDevice.signal} className="h-1.5 bg-zinc-800" indicatorClassName="bg-green-500" />
                 </div>
               </div>
 
               {/* Device Info */}
-              <div className="bg-white rounded-lg p-3 space-y-2 mb-3">
-                <h4 className="text-sm text-slate-600 mb-2">{text.deviceInfo}</h4>
+              <div className="bg-black rounded-lg p-3 space-y-2 mb-3 border border-zinc-800">
+                <h4 className="text-sm text-zinc-400 mb-2">{text.deviceInfo}</h4>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500">{text.model}</span>
-                  <span className="text-slate-800">{connectedDevice.model}</span>
+                  <span className="text-zinc-500">{text.model}</span>
+                  <span className="text-zinc-300">{connectedDevice.model}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500">{text.serialNumber}</span>
-                  <span className="text-slate-800">{connectedDevice.id}</span>
+                  <span className="text-zinc-500">{text.serialNumber}</span>
+                  <span className="text-zinc-300">{connectedDevice.id}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500">{text.firmwareVersion}</span>
-                  <span className="text-slate-800">v2.4.1</span>
+                  <span className="text-zinc-500">{text.firmwareVersion}</span>
+                  <span className="text-zinc-300">v2.4.1</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500">{text.lastSync}</span>
-                  <span className="text-slate-800">{language === 'zh-CN' ? '2分钟前' : '2 min ago'}</span>
+                  <span className="text-zinc-500">{text.lastSync}</span>
+                  <span className="text-zinc-300">{language === 'zh-CN' ? '2分钟前' : '2 min ago'}</span>
                 </div>
               </div>
 
@@ -221,7 +213,7 @@ export function BluetoothConnect({ onBack }: BluetoothConnectProps) {
               <div className="grid grid-cols-2 gap-2">
                 <Button
                   variant="outline"
-                  className="border-cyan-600 text-cyan-600 hover:bg-cyan-50"
+                  className="border-green-600/50 text-green-500 hover:bg-green-950/30 hover:text-green-400 bg-transparent"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
                   {text.syncNow}
@@ -229,7 +221,7 @@ export function BluetoothConnect({ onBack }: BluetoothConnectProps) {
                 <Button
                   onClick={handleDisconnect}
                   variant="outline"
-                  className="border-red-500 text-red-500 hover:bg-red-50"
+                  className="border-red-500/50 text-red-500 hover:bg-red-950/30 hover:text-red-400 bg-transparent"
                 >
                   <X className="w-4 h-4 mr-2" />
                   {text.disconnect}
@@ -244,7 +236,7 @@ export function BluetoothConnect({ onBack }: BluetoothConnectProps) {
           <Button
             onClick={scanning ? () => setScanning(false) : handleScan}
             disabled={scanning}
-            className="w-full bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white"
+            className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white border-none"
           >
             {scanning ? (
               <>
@@ -263,24 +255,24 @@ export function BluetoothConnect({ onBack }: BluetoothConnectProps) {
         {/* Available Devices */}
         {availableDevices.length > 0 && (
           <div>
-            <h3 className="text-sm text-slate-600 mb-3">{text.availableDevices}</h3>
+            <h3 className="text-sm text-zinc-400 mb-3">{text.availableDevices}</h3>
             <div className="space-y-2">
               {availableDevices.map((device) => (
-                <Card key={device.id} className="p-4 border border-slate-200">
+                <Card key={device.id} className="p-4 border border-zinc-800 bg-zinc-900/50">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center">
-                        <Bluetooth className="w-5 h-5 text-slate-600" />
+                      <div className="w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center">
+                        <Bluetooth className="w-5 h-5 text-zinc-400" />
                       </div>
                       <div>
-                        <h4 className="text-sm text-slate-800">{device.name}</h4>
-                        <p className="text-xs text-slate-500">{device.model}</p>
+                        <h4 className="text-sm text-white font-medium">{device.name}</h4>
+                        <p className="text-xs text-zinc-500">{device.model}</p>
                       </div>
                     </div>
                     <Button
                       onClick={() => handleConnect(device)}
                       size="sm"
-                      className="bg-cyan-600 hover:bg-cyan-700 text-white"
+                      className="bg-green-600 hover:bg-green-700 text-white border-none"
                     >
                       {text.connect}
                     </Button>
@@ -293,10 +285,10 @@ export function BluetoothConnect({ onBack }: BluetoothConnectProps) {
 
         {/* No Devices */}
         {!scanning && availableDevices.length === 0 && !connectedDevice && (
-          <Card className="p-8 text-center border border-slate-200">
-            <Bluetooth className="w-12 h-12 mx-auto text-slate-300 mb-3" />
-            <p className="text-sm text-slate-600 mb-1">{text.noDevices}</p>
-            <p className="text-xs text-slate-400">{text.scanToFind}</p>
+          <Card className="p-8 text-center border border-zinc-800 bg-zinc-900/30">
+            <Bluetooth className="w-12 h-12 mx-auto text-zinc-700 mb-3" />
+            <p className="text-sm text-zinc-400 mb-1">{text.noDevices}</p>
+            <p className="text-xs text-zinc-600">{text.scanToFind}</p>
           </Card>
         )}
       </div>

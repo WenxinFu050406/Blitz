@@ -29,38 +29,38 @@ export function CarbonRanking({ onBack }: CarbonRankingProps) {
       {onBack && <FixedBackButton onClick={onBack} />}
       
       {/* Header */}
-      <div className="p-5 bg-gradient-to-r from-[#00ff88] to-[#00cc66] text-black">
+      <div className="p-5 bg-black border-b border-[#333]">
         <div className="flex items-center gap-3">
           <div className="flex-1">
-            <h1 className="text-xl">{t.title}</h1>
-            <p className="text-xs opacity-80 mt-0.5">{t.subtitle}</p>
+            <h1 className="text-xl text-white">{t.title}</h1>
+            <p className="text-xs text-gray-400 mt-0.5">{t.subtitle}</p>
           </div>
         </div>
       </div>
 
       {/* Your Rank */}
       <div className="p-4">
-        <Card className="p-6 bg-gradient-to-br from-[#00ff88] to-[#00cc66] text-black border-0">
+        <Card className="p-6 bg-[#1a1a1a] border border-[#00ff88] text-white">
           <div className="flex items-center justify-between mb-4">
             <div>
               <p className="text-sm opacity-90">Your Rank</p>
               <div className="flex items-baseline gap-2 mt-1">
-                <h1 className="text-5xl">#{currentUser.rank}</h1>
-                <TrendingUp className="w-6 h-6 text-yellow-400" />
+                <h1 className="text-5xl text-[#00ff88]">#{currentUser.rank}</h1>
+                <TrendingUp className="w-6 h-6 text-[#00ff88]" />
               </div>
             </div>
-            <div className={`w-20 h-20 rounded-full bg-gradient-to-br ${badgeInfo.color} flex items-center justify-center shadow-lg text-3xl border-4 border-black`}>
+            <div className={`w-20 h-20 rounded-full bg-[#1a1a1a] border-2 border-[#00ff88] flex items-center justify-center shadow-lg text-3xl`}>
               {badgeInfo.emoji}
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4 mt-4">
-            <div className="bg-black/20 rounded-lg p-3 backdrop-blur-sm">
+            <div className="bg-black rounded-lg p-3">
               <p className="text-xs opacity-80">CO₂ Saved</p>
-              <p className="text-xl mt-1">{currentUser.carbonSaved} kg</p>
+              <p className="text-xl mt-1 text-[#00ff88]">{currentUser.carbonSaved} kg</p>
             </div>
-            <div className="bg-black/20 rounded-lg p-3 backdrop-blur-sm">
+            <div className="bg-black rounded-lg p-3">
               <p className="text-xs opacity-80">Distance</p>
-              <p className="text-xl mt-1">{currentUser.distance} km</p>
+              <p className="text-xl mt-1 text-[#00ff88]">{currentUser.distance} km</p>
             </div>
           </div>
         </Card>
@@ -170,7 +170,7 @@ export function CarbonRanking({ onBack }: CarbonRankingProps) {
         <Card className="p-6 bg-gradient-to-br from-[#1a1a1a] to-[#2a2a2a] border-[#2a2a2a]">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-[#00ff88] rounded-full flex items-center justify-center">
+              <div className="w-12 h-12 bg-[#1a1a1a] border border-[#00ff88] rounded-full flex items-center justify-center">
                 🌳
               </div>
               <div className="flex-1">
@@ -179,16 +179,16 @@ export function CarbonRanking({ onBack }: CarbonRankingProps) {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center">
+              <div className="w-12 h-12 bg-[#1a1a1a] border border-[#00ff88] rounded-full flex items-center justify-center">
                 ⚡
               </div>
               <div className="flex-1">
                 <p className="text-sm text-gray-400">Energy saved</p>
-                <p className="text-xl text-yellow-400">584 kWh</p>
+                <p className="text-xl text-[#00ff88]">584 kWh</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-[#00ff88] rounded-full flex items-center justify-center">
+              <div className="w-12 h-12 bg-[#1a1a1a] border border-[#00ff88] rounded-full flex items-center justify-center">
                 🚗
               </div>
               <div className="flex-1">

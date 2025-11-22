@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   username TEXT NOT NULL,
   avatar TEXT,
+  background_image TEXT,
   location TEXT,
   bio TEXT,
   language TEXT DEFAULT 'en' CHECK (language IN ('en', 'zh')),

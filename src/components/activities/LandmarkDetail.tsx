@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { MapPin, Navigation, Users, Clock, Award, ChevronRight, Check } from 'lucide-react';
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
@@ -21,6 +21,7 @@ interface LandmarkDetailProps {
 
 export function LandmarkDetail({ landmark, onBack }: LandmarkDetailProps) {
   const { language } = useLanguage();
+  const [viewMode, setViewMode] = useState<'detail' | 'navigate' | 'full-map'>('detail');
   
   // Load joined state from backend storage
   const [joined, setJoined] = useState(() => landmarkJoinsDB.isJoined(landmark.id));
@@ -58,6 +59,12 @@ export function LandmarkDetail({ landmark, onBack }: LandmarkDetailProps) {
       highlight1: 'Scenic river views',
       highlight2: 'Photo opportunities at landmarks',
       highlight3: 'Coffee break at bike-friendly café',
+      navigationStarted: 'Navigation Started',
+      turnLeft: 'Turn left in 100m',
+      distanceRemaining: 'Distance Remaining',
+      timeRemaining: 'Time Remaining',
+      exitNavigation: 'Exit Navigation',
+      fullMap: 'Full Route Map',
     },
     'zh-CN': {
       viewRoute: '查看路线',
@@ -85,6 +92,12 @@ export function LandmarkDetail({ landmark, onBack }: LandmarkDetailProps) {
       highlight1: '河畔风景优美',
       highlight2: '地标拍照机会',
       highlight3: '友好咖啡馆休息',
+      navigationStarted: '导航开始',
+      turnLeft: '100米后左转',
+      distanceRemaining: '剩余距离',
+      timeRemaining: '剩余时间',
+      exitNavigation: '退出导航',
+      fullMap: '全屏地图',
     },
   };
 
@@ -99,13 +112,85 @@ export function LandmarkDetail({ landmark, onBack }: LandmarkDetailProps) {
     difficulty: text.easy,
     estimatedTime: language === 'zh-CN' ? '2小时' : '2 hours',
     pointsReward: 500,
+    difficultyValue: 'Easy' // Added for rendering consistency if needed
   };
+  
+  // Override difficulty display text
+  groupEvent.difficulty = text.easy;
 
   const currentParticipants = [
     { id: 1, name: 'Sarah L.', avatar: '👩' },
     { id: 2, name: 'Mike T.', avatar: '👨' },
     { id: 3, name: 'Alex K.', avatar: '🧑' },
   ];
+
+  if (viewMode === 'navigate') {
+    return (
+      <div className="flex flex-col h-full bg-black overflow-hidden relative">
+        <div className="absolute inset-0">
+             <iframe
+              src={`https://www.openstreetmap.org/export/embed.html?bbox=-122.45%2C37.77%2C-122.41%2C37.80&layer=mapnik`}
+              className="w-full h-full opacity-80"
+              style={{ filter: 'invert(90%) hue-rotate(180deg)' }}
+              title="Navigation Map"
+            />
+        </div>
+        <div className="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black/80 to-transparent z-10">
+           <div className="flex items-center justify-between text-white mb-4">
+               <Button variant="ghost" onClick={() => setViewMode('detail')} className="text-white">
+                   <ChevronRight className="w-6 h-6 rotate-180" />
+               </Button>
+               <h2 className="text-lg font-bold">{text.navigationStarted}</h2>
+               <div className="w-10" />
+           </div>
+           <Card className="bg-[#1a1a1a] border-[#00ff88] p-4 text-white flex items-center gap-4">
+               <div className="w-12 h-12 bg-[#00ff88]/20 rounded-full flex items-center justify-center">
+                   <Navigation className="w-6 h-6 text-[#00ff88]" />
+               </div>
+               <div>
+                   <p className="text-xl font-bold">{text.turnLeft}</p>
+                   <p className="text-sm text-gray-400">Main Street</p>
+               </div>
+           </Card>
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 p-6 bg-[#1a1a1a] border-t border-[#333] z-10 rounded-t-3xl">
+            <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="text-center">
+                    <p className="text-sm text-gray-400">{text.distanceRemaining}</p>
+                    <p className="text-2xl font-bold text-white">2.4 km</p>
+                </div>
+                <div className="text-center">
+                    <p className="text-sm text-gray-400">{text.timeRemaining}</p>
+                    <p className="text-2xl font-bold text-white">12 min</p>
+                </div>
+            </div>
+            <Button onClick={() => setViewMode('detail')} className="w-full bg-red-500 hover:bg-red-600 text-white">
+                {text.exitNavigation}
+            </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (viewMode === 'full-map') {
+      return (
+          <div className="flex flex-col h-full bg-black">
+            <div className="p-4 border-b border-[#333] flex items-center justify-between bg-[#1a1a1a]">
+                <Button variant="ghost" onClick={() => setViewMode('detail')} className="text-white p-0">
+                   <ChevronRight className="w-6 h-6 rotate-180 mr-2" />
+                   {text.eventDetails}
+                </Button>
+                <h2 className="text-base font-bold text-white">{text.fullMap}</h2>
+            </div>
+            <iframe
+              src={`https://www.openstreetmap.org/export/embed.html?bbox=-122.45%2C37.77%2C-122.41%2C37.80&layer=mapnik`}
+              className="flex-1 w-full border-0"
+              style={{ filter: 'invert(90%) hue-rotate(180deg)' }}
+              title="Full Route Map"
+            />
+          </div>
+      );
+  }
 
   return (
     <div className="flex flex-col h-full bg-black overflow-auto">
@@ -129,11 +214,18 @@ export function LandmarkDetail({ landmark, onBack }: LandmarkDetailProps) {
       <div className="p-4 space-y-4">
         {/* Quick Actions */}
         <div className="grid grid-cols-2 gap-3">
-          <Button className="bg-gradient-to-r from-[#00ff88] to-[#00cc66] hover:opacity-90 text-black">
+          <Button 
+            onClick={() => setViewMode('navigate')}
+            className="bg-gradient-to-r from-[#00ff88] to-[#00cc66] hover:opacity-90 text-black"
+          >
             <Navigation className="w-4 h-4 mr-2" />
             {text.navigate}
           </Button>
-          <Button variant="outline" className="border-[#00ff88] text-[#00ff88] hover:bg-[#00ff88]/10">
+          <Button 
+            variant="outline" 
+            onClick={() => setViewMode('full-map')}
+            className="border-[#00ff88] text-[#00ff88] hover:bg-[#00ff88]/10"
+          >
             <MapPin className="w-4 h-4 mr-2" />
             {text.viewRoute}
           </Button>

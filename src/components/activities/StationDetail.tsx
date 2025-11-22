@@ -95,17 +95,17 @@ export function StationDetail({ station, onBack }: StationDetailProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white overflow-auto">
+    <div className="flex flex-col h-full bg-black overflow-auto">
       <FixedBackButton onClick={onBack} />
 
       {/* Header Image */}
-      <div className="h-48 bg-gradient-to-br from-cyan-500 to-teal-500 relative">
-        <div className="absolute inset-0 flex items-center justify-center text-6xl">
+      <div className="h-48 bg-[#1a1a1a] relative border-b border-[#00ff88]">
+        <div className="absolute inset-0 flex items-center justify-center text-6xl text-[#00ff88]">
           {station.type === 'cafe' ? '☕' : station.type === 'repair' ? '🔧' : '⚡'}
         </div>
-        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 flex items-center gap-1">
-          <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-          <span className="text-sm text-slate-800">{station.rating}</span>
+        <div className="absolute top-4 right-4 bg-black/80 backdrop-blur-sm rounded-full px-3 py-1.5 flex items-center gap-1 border border-[#00ff88]">
+          <Star className="w-4 h-4 text-[#00ff88] fill-[#00ff88]" />
+          <span className="text-sm text-white">{station.rating}</span>
         </div>
       </div>
 
@@ -114,65 +114,65 @@ export function StationDetail({ station, onBack }: StationDetailProps) {
         <div>
           <div className="flex items-start justify-between mb-2">
             <div>
-              <h1 className="text-xl text-slate-800">{station.name}</h1>
-              <p className="text-sm text-slate-500 mt-1">{station.distance} {language === 'zh-CN' ? '外' : 'away'}</p>
+              <h1 className="text-xl text-white">{station.name}</h1>
+              <p className="text-sm text-gray-400 mt-1">{station.distance} {language === 'zh-CN' ? '外' : 'away'}</p>
             </div>
-            <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs">
+            <div className="bg-[#1a1a1a] text-[#00ff88] px-3 py-1 rounded-full text-xs border border-[#00ff88]">
               ✓ {text.verified}
             </div>
           </div>
-          <p className="text-sm text-slate-600">{stationDescriptions[language][station.type]}</p>
+          <p className="text-sm text-gray-400">{stationDescriptions[language][station.type]}</p>
         </div>
 
         {/* Quick Actions */}
         <div className="grid grid-cols-2 gap-3">
-          <Button className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white">
+          <Button className="bg-[#00ff88] text-black hover:bg-[#00cc66]">
             <Navigation className="w-4 h-4 mr-2" />
             {text.navigate}
           </Button>
-          <Button variant="outline" className="border-cyan-600 text-cyan-600 hover:bg-cyan-50">
+          <Button variant="outline" className="border-[#00ff88] text-[#00ff88] hover:bg-[#00ff88]/10 bg-black">
             <Phone className="w-4 h-4 mr-2" />
             {text.call}
           </Button>
         </div>
 
         {/* Station Details */}
-        <Card className="p-4 border border-slate-200 space-y-3">
+        <Card className="p-4 border border-[#2a2a2a] bg-[#1a1a1a] space-y-3">
           <div className="flex items-start gap-3">
-            <MapPin className="w-5 h-5 text-slate-400 mt-0.5" />
+            <MapPin className="w-5 h-5 text-[#00ff88] mt-0.5" />
             <div className="flex-1">
-              <p className="text-xs text-slate-500 mb-1">{text.address}</p>
-              <p className="text-sm text-slate-800">{station.address}</p>
+              <p className="text-xs text-gray-400 mb-1">{text.address}</p>
+              <p className="text-sm text-white">{station.address}</p>
             </div>
           </div>
 
           <div className="flex items-start gap-3">
-            <Phone className="w-5 h-5 text-slate-400 mt-0.5" />
+            <Phone className="w-5 h-5 text-[#00ff88] mt-0.5" />
             <div className="flex-1">
-              <p className="text-xs text-slate-500 mb-1">{text.phone}</p>
-              <p className="text-sm text-slate-800">{station.phone}</p>
+              <p className="text-xs text-gray-400 mb-1">{text.phone}</p>
+              <p className="text-sm text-white">{station.phone}</p>
             </div>
           </div>
 
           <div className="flex items-start gap-3">
-            <Clock className="w-5 h-5 text-slate-400 mt-0.5" />
+            <Clock className="w-5 h-5 text-[#00ff88] mt-0.5" />
             <div className="flex-1">
-              <p className="text-xs text-slate-500 mb-1">{text.hours}</p>
-              <p className="text-sm text-slate-800">{station.hours}</p>
+              <p className="text-xs text-gray-400 mb-1">{text.hours}</p>
+              <p className="text-sm text-white">{station.hours}</p>
             </div>
           </div>
         </Card>
 
         {/* Services */}
         <div>
-          <h3 className="text-base mb-3">{text.services}</h3>
+          <h3 className="text-base mb-3 text-white">{text.services}</h3>
           <div className="grid grid-cols-3 gap-2">
-            {station.services.map((service) => {
+            {(station.services || []).map((service) => {
               const Icon = serviceIcons[service] || Coffee;
               return (
-                <div key={service} className="flex flex-col items-center gap-2 p-3 bg-slate-50 rounded-lg">
-                  <Icon className="w-5 h-5 text-cyan-600" />
-                  <span className="text-xs text-center text-slate-600">{service}</span>
+                <div key={service} className="flex flex-col items-center gap-2 p-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg">
+                  <Icon className="w-5 h-5 text-[#00ff88]" />
+                  <span className="text-xs text-center text-gray-300">{service}</span>
                 </div>
               );
             })}
@@ -180,13 +180,13 @@ export function StationDetail({ station, onBack }: StationDetailProps) {
         </div>
 
         {/* Special Offer */}
-        <Card className="p-4 bg-gradient-to-br from-orange-50 to-yellow-50 border-2 border-orange-200">
+        <Card className="p-4 bg-[#1a1a1a] border border-[#00ff88]">
           <div className="flex items-start gap-3">
             <div className="text-2xl">🎁</div>
             <div className="flex-1">
-              <h3 className="text-base text-orange-800 mb-2">{text.specialOffer}</h3>
-              <p className="text-sm text-slate-700 mb-2">{text.offerDesc}</p>
-              <p className="text-xs text-orange-600">
+              <h3 className="text-base text-[#00ff88] mb-2">{text.specialOffer}</h3>
+              <p className="text-sm text-white mb-2">{text.offerDesc}</p>
+              <p className="text-xs text-gray-400">
                 {text.validUntil}: {language === 'zh-CN' ? '2025年12月31日' : 'Dec 31, 2025'}
               </p>
             </div>
@@ -195,29 +195,29 @@ export function StationDetail({ station, onBack }: StationDetailProps) {
 
         {/* Member Benefits */}
         <div>
-          <h3 className="text-base mb-3">{text.benefits}</h3>
-          <Card className="p-4 border border-slate-200 space-y-3">
+          <h3 className="text-base mb-3 text-white">{text.benefits}</h3>
+          <Card className="p-4 border border-[#2a2a2a] bg-[#1a1a1a] space-y-3">
             <div className="flex items-start gap-3">
-              <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-sm">✓</div>
-              <p className="text-sm text-slate-700 flex-1">{text.benefit1}</p>
+              <div className="w-6 h-6 bg-[#00ff88]/20 rounded-full flex items-center justify-center text-[#00ff88] text-sm">✓</div>
+              <p className="text-sm text-white flex-1">{text.benefit1}</p>
             </div>
             <div className="flex items-start gap-3">
-              <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-sm">✓</div>
-              <p className="text-sm text-slate-700 flex-1">{text.benefit2}</p>
+              <div className="w-6 h-6 bg-[#00ff88]/20 rounded-full flex items-center justify-center text-[#00ff88] text-sm">✓</div>
+              <p className="text-sm text-white flex-1">{text.benefit2}</p>
             </div>
             <div className="flex items-start gap-3">
-              <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-sm">✓</div>
-              <p className="text-sm text-slate-700 flex-1">{text.benefit3}</p>
+              <div className="w-6 h-6 bg-[#00ff88]/20 rounded-full flex items-center justify-center text-[#00ff88] text-sm">✓</div>
+              <p className="text-sm text-white flex-1">{text.benefit3}</p>
             </div>
           </Card>
         </div>
 
         {/* Gallery */}
         <div>
-          <h3 className="text-base mb-3">{text.gallery}</h3>
+          <h3 className="text-base mb-3 text-white">{text.gallery}</h3>
           <div className="grid grid-cols-3 gap-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="aspect-square bg-gradient-to-br from-slate-200 to-slate-300 rounded-lg flex items-center justify-center">
+              <div key={i} className="aspect-square bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg flex items-center justify-center">
                 <span className="text-3xl">
                   {station.type === 'cafe' ? '☕' : station.type === 'repair' ? '🔧' : '⚡'}
                 </span>
@@ -228,11 +228,11 @@ export function StationDetail({ station, onBack }: StationDetailProps) {
 
         {/* Map */}
         <div>
-          <h3 className="text-base mb-3">{language === 'zh-CN' ? '位置' : 'Location'}</h3>
-          <Card className="overflow-hidden border border-slate-200">
+          <h3 className="text-base mb-3 text-white">{language === 'zh-CN' ? '位置' : 'Location'}</h3>
+          <Card className="overflow-hidden border border-[#2a2a2a]">
             <iframe
               src={`https://www.openstreetmap.org/export/embed.html?bbox=-122.42%2C37.78%2C-122.40%2C37.79&layer=mapnik`}
-              className="w-full h-48 border-0"
+              className="w-full h-48 border-0 opacity-80 hover:opacity-100 transition-opacity"
               title="Station Location"
             />
           </Card>

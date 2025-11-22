@@ -132,30 +132,12 @@ export const carbonRankings: CarbonData[] = [
     badge: "platinum",
   },
   {
-    userId: "2",
-    userName: "Sarah Chen",
-    avatar: "👩",
-    carbonSaved: 132.4,
-    distance: 1134.2,
-    rank: 2,
-    badge: "gold",
-  },
-  {
-    userId: "3",
-    userName: "Mike Johnson",
-    avatar: "👨",
-    carbonSaved: 128.9,
-    distance: 1105.6,
-    rank: 3,
-    badge: "gold",
-  },
-  {
     userId: "4",
     userName: "Emma Wilson",
     avatar: "👧",
     carbonSaved: 115.2,
     distance: 987.3,
-    rank: 4,
+    rank: 2,
     badge: "silver",
   },
   {
@@ -164,7 +146,7 @@ export const carbonRankings: CarbonData[] = [
     avatar: "🧑",
     carbonSaved: 98.7,
     distance: 846.1,
-    rank: 5,
+    rank: 3,
     badge: "silver",
   },
 ];
@@ -232,30 +214,6 @@ export const supplyStations: SupplyStation[] = [
 
 export const communityPosts: Post[] = [
   {
-    id: "1",
-    userId: "2",
-    userName: "Sarah Chen",
-    userAvatar: "👩",
-    content:
-      "Just completed a 50km ride along the riverside! The weather was perfect 🚴‍♀️",
-    image:
-      "https://images.unsplash.com/photo-1613370625437-f2956da172ef?w=600",
-    likes: 24,
-    comments: 5,
-    timestamp: "2 hours ago",
-  },
-  {
-    id: "2",
-    userId: "3",
-    userName: "Mike Johnson",
-    userAvatar: "👨",
-    content:
-      "Found this amazing new trail in the hills. Anyone want to join next weekend?",
-    likes: 18,
-    comments: 12,
-    timestamp: "5 hours ago",
-  },
-  {
     id: "3",
     userId: "4",
     userName: "Emma Wilson",
@@ -280,28 +238,7 @@ export const currentUser: User = {
   bio: "Urban explorer | BESV enthusiast | Green commuter 🚴‍♂️🌱",
 };
 
-export const friends: User[] = [
-  {
-    id: "2",
-    name: "Sarah Chen",
-    avatar: "👩",
-    location: "San Francisco, CA",
-    totalDistance: 1134.2,
-    friendsCount: 38,
-    posts: 24,
-    bio: "Weekend warrior on two wheels",
-  },
-  {
-    id: "3",
-    name: "Mike Johnson",
-    avatar: "👨",
-    location: "Oakland, CA",
-    totalDistance: 1105.6,
-    friendsCount: 52,
-    posts: 31,
-    bio: "Trail finder and coffee lover",
-  },
-];
+export const friends: User[] = [];
 
 export const userStats = {
   totalRides: 156,

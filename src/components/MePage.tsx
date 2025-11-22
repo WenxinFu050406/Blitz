@@ -1,11 +1,11 @@
-import { Settings, ChevronRight, Award, History, Bell, HelpCircle, Shield, LogOut, Edit } from 'lucide-react';
+import { Settings, ChevronRight, Award, History, Bell, HelpCircle, Shield, LogOut, Edit, Camera } from 'lucide-react';
 import { userStats } from '../data/mockData';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { getTranslation } from '../locales/translations';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { EditProfile } from './me/EditProfile';
 import { Achievements } from './me/Achievements';
 import { RideHistory } from './me/RideHistory';
@@ -17,10 +17,27 @@ import { PrivacySecurity } from './me/PrivacySecurity';
 type MeView = 'main' | 'edit-profile' | 'achievements' | 'ride-history' | 'notifications' | 'settings' | 'help' | 'privacy';
 
 export function MePage() {
-  const { logout, currentUser } = useAuth();
+  const { logout, currentUser, updateProfile } = useAuth();
   const { language } = useLanguage();
   const t = getTranslation(language).me;
   const [view, setView] = useState<MeView>('main');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const result = reader.result as string;
+        try {
+          await updateProfile({ backgroundImage: result });
+        } catch (error) {
+          console.error("Failed to save background image", error);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   
   const menuItems = [
     { id: 'edit-profile', icon: Edit, label: t.editProfile, color: 'text-cyan-600' },
@@ -63,8 +80,36 @@ export function MePage() {
   return (
     <div className="flex flex-col h-full bg-zinc-950 overflow-auto">
       {/* Header */}
-      <div className="p-5 bg-zinc-900 border-b border-zinc-800">
-        <div className="flex items-center gap-3">
+      <div 
+        className="relative p-5 border-b border-zinc-800 bg-zinc-900 bg-cover bg-center transition-all group"
+        style={{ 
+          backgroundImage: currentUser?.backgroundImage ? `url(${currentUser.backgroundImage})` : undefined 
+        }}
+      >
+        {/* Overlay for better text visibility if image is present */}
+        {currentUser?.backgroundImage && (
+          <div className="absolute inset-0 bg-black/60 z-0" />
+        )}
+
+        {/* Background Edit Button */}
+        <div className="absolute top-2 right-2 z-20">
+          <button 
+            onClick={() => fileInputRef.current?.click()}
+            className="p-2 text-white/70 hover:text-white bg-black/30 hover:bg-black/50 rounded-full backdrop-blur-md transition-all opacity-0 group-hover:opacity-100 focus:opacity-100"
+            title={t.editProfile}
+          >
+            <Camera className="w-4 h-4" />
+          </button>
+          <input 
+            type="file" 
+            ref={fileInputRef}
+            className="hidden"
+            accept="image/*"
+            onChange={handleImageUpload}
+          />
+        </div>
+
+        <div className="relative z-10 flex items-center gap-3">
           <div className="w-16 h-16 bg-primary/20 rounded-full overflow-hidden backdrop-blur-sm border-2 border-primary/30 shadow-lg">
             <img 
               src={currentUser?.avatar} 
@@ -77,7 +122,7 @@ export function MePage() {
             <p className="text-xs text-zinc-400 mt-0.5">@{currentUser?.username}</p>
           </div>
         </div>
-        <p className="text-xs mt-3 text-zinc-300">{currentUser?.bio}</p>
+        <p className="relative z-10 text-xs mt-3 text-zinc-300">{currentUser?.bio}</p>
       </div>
 
       {/* Stats Grid */}

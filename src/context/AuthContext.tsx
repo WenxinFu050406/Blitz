@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { API_BASE } from '../utils/api';
 
 interface User {
   id: string;
@@ -18,6 +18,7 @@ interface User {
   avgSpeed?: number;
   carbonSaved?: number;
   greenEnergy?: number;
+  backgroundImage?: string;
 }
 
 interface AuthContextType {
@@ -31,8 +32,6 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-const API_BASE = `https://${projectId}.supabase.co/functions/v1/server/make-server-8ab7634a`;
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
@@ -52,12 +51,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   });
 
   const login = (userData: Partial<User>, token?: string) => {
+    // Helper to generate a random rider name
+    const generateRiderName = () => {
+      const adjectives = ['Speedy', 'Eco', 'Green', 'Urban', 'Electric', 'Smart', 'Bold', 'Swift'];
+      const nouns = ['Rider', 'Cyclist', 'Commuter', 'Explorer', 'Voyager', 'Sprinter', 'Pacer'];
+      const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+      const noun = nouns[Math.floor(Math.random() * nouns.length)];
+      return `${adj}${noun}${Math.floor(Math.random() * 1000)}`;
+    };
+
+    const defaultName = generateRiderName();
+
     const user: User = {
       id: userData.id || Date.now().toString(),
       email: userData.email || '',
       phone: userData.phone,
       name: userData.name || userData.username || 'BESV Rider',
-      username: userData.username || `rider_${Date.now()}`,
+      username: userData.username || defaultName,
       avatar: userData.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${Date.now()}`,
       location: userData.location || 'Downtown Area',
       totalDistance: userData.totalDistance || 0,
@@ -69,6 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       posts: userData.posts || 0,
       greenEnergy: userData.greenEnergy || 0,
       bio: userData.bio || 'BESV rider 🚴‍♂️',
+      backgroundImage: userData.backgroundImage,
     };
     
     setIsAuthenticated(true);
@@ -133,12 +144,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Failed to refresh user:', errorData.error);
-        // If unauthorized, log out
-        if (response.status === 401) {
+        // If unauthorized, log out without error logging
+        if (response.status === 401 || response.status === 403) {
           logout();
+          return;
         }
+
+        const errorData = await response.json();
+        
+        // Check for credential-related errors even if status isn't 401 (e.g. 400)
+        if (errorData.error && (
+          errorData.error.includes('Invalid') || 
+          errorData.error.includes('credentials') || 
+          errorData.error.includes('expired')
+        )) {
+          logout();
+          return;
+        }
+
+        console.error('Failed to refresh user:', errorData.error);
         return;
       }
 

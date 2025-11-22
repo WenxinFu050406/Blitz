@@ -25,84 +25,84 @@ export function Achievements({ onBack }: AchievementsProps) {
   const unlockedCount = achievements.filter(a => a.unlocked).length;
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full bg-black">
       {/* Header */}
-      <div className="flex items-center gap-3 p-4 border-b border-slate-100 bg-gradient-to-r from-yellow-500 to-orange-500 text-white">
+      <div className="flex items-center gap-3 p-4 border-b border-[#333] bg-black text-white">
         <button
           onClick={onBack}
-          className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white/20 transition-colors"
+          className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#1a1a1a] transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div className="flex-1">
           <h2 className="text-base">Achievements</h2>
-          <p className="text-xs opacity-90 mt-0.5">{unlockedCount}/{achievements.length} Unlocked</p>
+          <p className="text-xs opacity-90 mt-0.5 text-gray-400">{unlockedCount}/{achievements.length} Unlocked</p>
         </div>
-        <Trophy className="w-8 h-8" />
+        <Trophy className="w-8 h-8 text-[#00ff88]" />
       </div>
 
       {/* Progress Stats */}
-      <div className="p-4 bg-gradient-to-br from-yellow-50 to-orange-50 border-b border-slate-100">
-        <div className="grid grid-cols-3 gap-3 text-center">
+      <div className="p-4 bg-[#1a1a1a] border-b border-[#333]">
+        <div className="grid grid-cols-3 gap-3 text-center text-white">
           <div>
-            <p className="text-2xl">{unlockedCount}</p>
-            <p className="text-xs text-slate-600 mt-0.5">Unlocked</p>
+            <p className="text-2xl text-[#00ff88]">{unlockedCount}</p>
+            <p className="text-xs text-gray-400 mt-0.5">Unlocked</p>
           </div>
           <div>
-            <p className="text-2xl">{Math.round((unlockedCount / achievements.length) * 100)}%</p>
-            <p className="text-xs text-slate-600 mt-0.5">Complete</p>
+            <p className="text-2xl text-[#00ff88]">{Math.round((unlockedCount / achievements.length) * 100)}%</p>
+            <p className="text-xs text-gray-400 mt-0.5">Complete</p>
           </div>
           <div>
-            <p className="text-2xl">{achievements.length - unlockedCount}</p>
-            <p className="text-xs text-slate-600 mt-0.5">In Progress</p>
+            <p className="text-2xl text-white">{achievements.length - unlockedCount}</p>
+            <p className="text-xs text-gray-400 mt-0.5">In Progress</p>
           </div>
         </div>
       </div>
 
       {/* Achievements List */}
-      <div className="flex-1 overflow-auto p-4 space-y-3">
+      <div className="flex-1 overflow-auto p-4 space-y-3 bg-black">
         {achievements.map((achievement) => (
           <Card
             key={achievement.id}
             className={`p-4 border transition-all ${
               achievement.unlocked
-                ? 'border-yellow-200 bg-gradient-to-r from-yellow-50 to-orange-50'
-                : 'border-slate-100 opacity-75'
+                ? 'border-[#00ff88] bg-[#1a1a1a] shadow-[0_0_10px_rgba(0,255,136,0.1)]'
+                : 'border-[#333] bg-[#111] opacity-75'
             }`}
           >
             <div className="flex items-start gap-3">
               <div
                 className={`w-14 h-14 rounded-xl flex items-center justify-center text-3xl flex-shrink-0 ${
                   achievement.unlocked
-                    ? 'bg-gradient-to-br from-yellow-400 to-orange-500 shadow-md'
-                    : 'bg-slate-200 grayscale'
+                    ? 'bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]'
+                    : 'bg-[#2a2a2a] grayscale border border-[#333]'
                 }`}
               >
                 {achievement.icon}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2 mb-1">
-                  <h3 className="text-sm">{achievement.name}</h3>
+                  <h3 className="text-sm text-white">{achievement.name}</h3>
                   {achievement.unlocked && (
-                    <Badge className="bg-green-500 text-white text-xs px-2 flex-shrink-0">
+                    <Badge className="bg-[#00ff88] text-black text-xs px-2 flex-shrink-0">
                       <Award className="w-3 h-3 mr-1" />
                       Unlocked
                     </Badge>
                   )}
                 </div>
-                <p className="text-xs text-slate-600 mb-2">{achievement.description}</p>
+                <p className="text-xs text-gray-400 mb-2">{achievement.description}</p>
                 
                 {achievement.unlocked ? (
-                  <p className="text-xs text-slate-500">Unlocked on {achievement.date}</p>
+                  <p className="text-xs text-[#00ff88]">Unlocked on {achievement.date}</p>
                 ) : (
                   <div>
-                    <div className="flex items-center justify-between text-xs text-slate-600 mb-1">
+                    <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
                       <span>Progress</span>
                       <span>{achievement.progress}%</span>
                     </div>
-                    <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                    <div className="w-full h-2 bg-[#2a2a2a] rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-cyan-500 to-teal-500 transition-all"
+                        className="h-full bg-[#00ff88] transition-all"
                         style={{ width: `${achievement.progress}%` }}
                       />
                     </div>

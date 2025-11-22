@@ -1,12 +1,12 @@
-import { projectId } from './supabase/info';
-
-const API_BASE = `https://${projectId}.supabase.co/functions/v1/server/make-server-8ab7634a`;
+import { API_BASE } from './api';
 
 export interface Post {
   id: string;
   userId: string;
   userName: string;
   userAvatar: string;
+  userLocation?: string;
+  userLocation?: string;
   content: string;
   image?: string;
   likes: number;
@@ -27,6 +27,47 @@ export interface Comment {
   isLiked?: boolean;
 }
 
+export interface PublicUser {
+  id: string;
+  name: string;
+  username: string;
+  avatar: string;
+  location: string;
+  totalDistance: number;
+  bio: string;
+  isFriend?: boolean;
+}
+
+// Get suggested users
+export async function getSuggestedUsers(accessToken: string): Promise<PublicUser[]> {
+  try {
+    const response = await fetch(`${API_BASE}/users`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+
+    if (!response.ok) {
+      // Silent fail for optional endpoint
+      return [];
+    }
+
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      console.error('Response is not JSON:', contentType);
+      return [];
+    }
+
+    const data = await response.json();
+    return data.users || [];
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return [];
+  }
+}
+
 // Get all posts
 export async function getPosts(accessToken: string): Promise<Post[]> {
   try {
@@ -40,9 +81,14 @@ export async function getPosts(accessToken: string): Promise<Post[]> {
 
     // Check if response is ok before parsing
     if (!response.ok) {
-      console.error('Failed to fetch posts, status:', response.status);
-      console.error('This usually means no posts exist yet. Run the setup to create test users and sample posts.');
-      console.error('Visit /setup.html or click "Open Setup Guide" on the login page.');
+      // If 404, it just means no posts exist yet - return empty array without error
+      if (response.status === 404) {
+        return [];
+      }
+      // Only log real errors (500s, etc) - 401s are handled by auth context
+      if (response.status !== 404 && response.status !== 401) {
+        console.error('Failed to fetch posts, status:', response.status);
+      }
       return [];
     }
 
@@ -78,7 +124,9 @@ export async function createPost(
     });
 
     if (!response.ok) {
-      console.error('Failed to create post, status:', response.status);
+      if (response.status !== 401) {
+        console.error('Failed to create post, status:', response.status);
+      }
       return null;
     }
 
@@ -111,7 +159,9 @@ export async function togglePostLike(
     });
 
     if (!response.ok) {
-      console.error('Failed to toggle like, status:', response.status);
+      if (response.status !== 401) {
+        console.error('Failed to toggle like, status:', response.status);
+      }
       return null;
     }
 
@@ -147,7 +197,9 @@ export async function getComments(
     });
 
     if (!response.ok) {
-      console.error('Failed to fetch comments, status:', response.status);
+      if (response.status !== 401) {
+        console.error('Failed to fetch comments, status:', response.status);
+      }
       return [];
     }
 
@@ -182,7 +234,9 @@ export async function addComment(
     });
 
     if (!response.ok) {
-      console.error('Failed to add comment, status:', response.status);
+      if (response.status !== 401) {
+        console.error('Failed to add comment, status:', response.status);
+      }
       return null;
     }
 
@@ -215,7 +269,9 @@ export async function toggleCommentLike(
     });
 
     if (!response.ok) {
-      console.error('Failed to toggle comment like, status:', response.status);
+      if (response.status !== 401) {
+        console.error('Failed to toggle comment like, status:', response.status);
+      }
       return null;
     }
 
@@ -233,5 +289,139 @@ export async function toggleCommentLike(
   } catch (error) {
     console.error('Error toggling comment like:', error);
     return null;
+  }
+}
+
+// Delete a post
+export async function deletePost(
+  accessToken: string,
+  postId: string
+): Promise<boolean> {
+  try {
+    const response = await fetch(`${API_BASE}/posts/${postId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+
+    return response.ok;
+  } catch (error) {
+    console.error('Error deleting post:', error);
+    return false;
+  }
+}
+
+// Delete a comment
+export async function deleteComment(
+  accessToken: string,
+  postId: string,
+  commentId: string
+): Promise<boolean> {
+  try {
+    const response = await fetch(`${API_BASE}/posts/${postId}/comments/${commentId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+
+    return response.ok;
+  } catch (error) {
+    console.error('Error deleting comment:', error);
+    return false;
+  }
+}
+
+// Get user profile
+export async function getUserProfile(
+  accessToken: string,
+  userId: string
+): Promise<PublicUser | null> {
+  try {
+    const response = await fetch(`${API_BASE}/users/${userId}/profile`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    return data.user;
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    return null;
+  }
+}
+
+// Follow a user
+export async function followUser(
+  accessToken: string,
+  userId: string
+): Promise<boolean> {
+  try {
+    const response = await fetch(`${API_BASE}/users/${userId}/follow`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+
+    return response.ok;
+  } catch (error) {
+    console.error('Error following user:', error);
+    return false;
+  }
+}
+
+// Unfollow a user
+export async function unfollowUser(
+  accessToken: string,
+  userId: string
+): Promise<boolean> {
+  try {
+    const response = await fetch(`${API_BASE}/users/${userId}/follow`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+
+    return response.ok;
+  } catch (error) {
+    console.error('Error unfollowing user:', error);
+    return false;
+  }
+}
+
+// Get followed users (friends)
+export async function getFollowedUsers(
+  accessToken: string
+): Promise<PublicUser[]> {
+  try {
+    const response = await fetch(`${API_BASE}/user/following`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const data = await response.json();
+    return data.users || [];
+  } catch (error) {
+    console.error('Error fetching followed users:', error);
+    return [];
   }
 }
