@@ -925,6 +925,10 @@
     max-height: var(--radix-dropdown-menu-content-available-height);
   }
 
+  .max-h-\[80vh\] {
+    max-height: 80vh;
+  }
+
   .min-h-\[100px\] {
     min-height: 100px;
   }
@@ -1495,6 +1499,16 @@
     border-color: var(--border);
   }
 
+  .border-border\/50 {
+    border-color: var(--border);
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .border-border\/50 {
+      border-color: color-mix(in oklab, var(--border) 50%, transparent);
+    }
+  }
+
   .border-green-500\/50 {
     border-color: color-mix(in srgb, oklch(.723 .219 149.579) 50%, transparent);
   }
@@ -1793,6 +1807,16 @@
 
   .bg-muted {
     background-color: var(--muted);
+  }
+
+  .bg-muted\/30 {
+    background-color: var(--muted);
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-muted\/30 {
+      background-color: color-mix(in oklab, var(--muted) 30%, transparent);
+    }
   }
 
   .bg-popover {

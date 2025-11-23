@@ -1,11 +1,13 @@
-import { TrendingUp, Clock, Zap, Leaf, Flame, Mountain, X } from 'lucide-react';
+import { TrendingUp, Clock, Zap, Leaf, Flame, Mountain, X, Activity } from 'lucide-react';
 import { userStats } from '../data/mockData';
 import { Card } from './ui/card';
 import { Progress } from './ui/progress';
+import { Button } from './ui/button';
 import { useLanguage } from '../context/LanguageContext';
 import { getTranslation } from '../locales/translations';
 import { useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { RideReport } from './home/RideReport';
 
 type TimePeriod = 'weekly' | 'monthly' | 'quarterly' | 'yearly';
 
@@ -30,6 +32,7 @@ export function StatisticsPage() {
   const t = getTranslation(language).statistics;
   const [timePeriod, setTimePeriod] = useState<TimePeriod>('weekly');
   const [selectedStat, setSelectedStat] = useState<string | null>(null);
+  const [showReport, setShowReport] = useState(false);
   const [chartData, setChartData] = useState(generateChartData('weekly'));
 
   const handlePeriodChange = (period: TimePeriod) => {
@@ -217,6 +220,15 @@ export function StatisticsPage() {
               </LineChart>
             </ResponsiveContainer>
           </Card>
+
+          {/* Recent Ride Report Button */}
+          <Button 
+            className="w-full mt-4 bg-zinc-900 border border-primary/20 hover:bg-primary/10 hover:border-primary text-primary flex items-center justify-center gap-2"
+            onClick={() => setShowReport(true)}
+          >
+            <Activity className="w-4 h-4" />
+            {language === 'zh-CN' ? '近日骑行报告' : 'Recent Ride Report'}
+          </Button>
         </div>
 
         {/* Recent Achievements */}
@@ -289,6 +301,8 @@ export function StatisticsPage() {
           </Card>
         </div>
       )}
+      {/* Ride Report Dialog */}
+      <RideReport isOpen={showReport} onClose={() => setShowReport(false)} />
     </div>
   );
 }
