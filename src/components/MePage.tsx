@@ -95,7 +95,7 @@ export function MePage() {
         <div className="absolute top-2 right-2 z-20">
           <button 
             onClick={() => fileInputRef.current?.click()}
-            className="p-2 text-white/70 hover:text-white bg-black/30 hover:bg-black/50 rounded-full backdrop-blur-md transition-all opacity-0 group-hover:opacity-100 focus:opacity-100"
+            className="p-2 text-primary hover:text-primary/80 bg-black/30 hover:bg-black/50 rounded-full backdrop-blur-md transition-all"
             title={t.editProfile}
           >
             <Camera className="w-4 h-4" />
