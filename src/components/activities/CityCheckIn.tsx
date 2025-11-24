@@ -101,7 +101,7 @@ export function CityCheckIn({ onBack }: CityCheckInProps) {
                   <Badge variant="outline" className="text-white border-white/20">{landmark.reward}</Badge>
                 </div>
                 {!landmark.visited ? (
-                  <button className="px-4 py-2 bg-[#00ff88] text-black rounded-lg hover:opacity-90 flex items-center gap-2">
+                  <button className="px-3 py-1.5 text-sm bg-[#00ff88] text-black rounded-lg hover:opacity-90 flex items-center gap-2">
                     <Navigation2 className="w-4 h-4" />
                     {t.viewRoute}
                   </button>

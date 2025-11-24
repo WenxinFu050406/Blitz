@@ -5,6 +5,7 @@ import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { FixedBackButton } from '../ui/FixedBackButton';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
+import { UserAvatar } from '../UserAvatar';
 import { useLanguage } from '../../context/LanguageContext';
 import { getTranslation } from '../../locales/translations';
 import { friendRequestsDB } from '../../utils/storage';
@@ -85,15 +86,7 @@ export function AddFriend({ user, onBack }: AddFriendProps) {
       <div className="p-5 bg-black text-white pt-16 border-b border-[#333]">
         <div className="flex flex-col items-center">
           <div className="w-24 h-24 bg-[#1a1a1a] backdrop-blur-sm rounded-full flex items-center justify-center overflow-hidden mb-3 border-2 border-[#00ff88]">
-            {user.avatar?.startsWith('http') || user.avatar?.startsWith('/') ? (
-              <ImageWithFallback 
-                src={user.avatar} 
-                alt={user.name} 
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <span className="text-5xl">{user.avatar || '👤'}</span>
-            )}
+            <UserAvatar src={user.avatar} alt={user.name} className="text-5xl" />
           </div>
           <h1 className="text-2xl mb-1">{user.name}</h1>
           <div className="flex items-center gap-1.5 text-sm opacity-90 mb-3 text-gray-400">

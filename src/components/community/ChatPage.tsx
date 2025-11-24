@@ -81,8 +81,12 @@ export function ChatPage({ friend, onBack }: ChatPageProps) {
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <div className="w-10 h-10 bg-[#2a2a2a] rounded-full flex items-center justify-center text-lg">
-            {friend.avatar}
+          <div className="w-10 h-10 bg-[#2a2a2a] rounded-full flex items-center justify-center text-lg overflow-hidden">
+            {friend.avatar?.startsWith('http') || friend.avatar?.startsWith('/') ? (
+              <img src={friend.avatar} alt={friend.name} className="w-full h-full object-cover" />
+            ) : (
+              friend.avatar || '👤'
+            )}
           </div>
           <div>
             <h2 className="text-sm text-white">{friend.name}</h2>

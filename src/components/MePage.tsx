@@ -8,6 +8,7 @@ import { getTranslation } from '../locales/translations';
 import { useState, useRef, useEffect } from 'react';
 import { EditProfile } from './me/EditProfile';
 import { Achievements } from './me/Achievements';
+import { UserAvatar } from './UserAvatar';
 import { RideHistory } from './me/RideHistory';
 import { Notifications } from './me/Notifications';
 import { Settings as SettingsPage } from './me/Settings';
@@ -111,10 +112,9 @@ export function MePage() {
 
         <div className="relative z-10 flex items-center gap-3">
           <div className="w-16 h-16 bg-primary/20 rounded-full overflow-hidden backdrop-blur-sm border-2 border-primary/30 shadow-lg">
-            <img 
+            <UserAvatar 
               src={currentUser?.avatar} 
               alt={currentUser?.name}
-              className="w-full h-full object-cover"
             />
           </div>
           <div className="flex-1">

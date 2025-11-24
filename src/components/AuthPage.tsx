@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Mail, ArrowRight, Check, User, AlertCircle, ChevronLeft, BookOpen, Bike, Users, BarChart } from 'lucide-react';
+import { Mail, ArrowRight, Check, User, AlertCircle, ChevronLeft, BookOpen, Bike, Users, BarChart, Eye, EyeOff } from 'lucide-react';
 import { Card } from './ui/card';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
@@ -46,6 +46,7 @@ export function AuthPage({ onAuthSuccess }: AuthPageProps) {
   const [authMode, setAuthMode] = useState<AuthMode>('login');
   const [registerStep, setRegisterStep] = useState<RegisterStep>('contact');
   const [showSetupGuide, setShowSetupGuide] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   
   // Form fields
   const [contact, setContact] = useState('');
@@ -227,6 +228,7 @@ export function AuthPage({ onAuthSuccess }: AuthPageProps) {
     setPassword('');
     setUsername('');
     setSelectedAvatar(avatarOptions[0]);
+    setShowPassword(false);
   };
 
   return (
@@ -307,13 +309,22 @@ export function AuthPage({ onAuthSuccess }: AuthPageProps) {
                     <label className="text-sm text-muted-foreground mb-2 block">
                       {language === 'zh-CN' ? '密码' : 'Password'}
                     </label>
-                    <Input
-                      type="password"
-                      placeholder={language === 'zh-CN' ? '请输入密码' : 'Enter your password'}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="h-11 bg-secondary border-border"
-                    />
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        placeholder={language === 'zh-CN' ? '请输入密码' : 'Enter your password'}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="h-11 bg-secondary border-border pr-10"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
                     <button className="text-xs text-primary hover:text-primary/80 mt-2">
                       {language === 'zh-CN' ? '忘记密码？' : 'Forgot password?'}
                     </button>
@@ -507,13 +518,22 @@ export function AuthPage({ onAuthSuccess }: AuthPageProps) {
                         <label className="text-sm text-muted-foreground mb-2 block">
                           {language === 'zh-CN' ? '创建密码' : 'Create Password'}
                         </label>
-                        <Input
-                          type="password"
-                          placeholder={language === 'zh-CN' ? '至少8个字符' : 'At least 8 characters'}
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          className="h-11 mb-3 bg-secondary border-border"
-                        />
+                        <div className="relative mb-3">
+                          <Input
+                            type={showPassword ? "text" : "password"}
+                            placeholder={language === 'zh-CN' ? '至少8个字符' : 'At least 8 characters'}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="h-11 bg-secondary border-border pr-10"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                          >
+                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
                         <div className="space-y-2 text-xs text-muted-foreground">
                           <div className="flex items-center gap-2">
                             <div className={`w-4 h-4 rounded-full flex items-center justify-center ${password.length >= 8 ? 'bg-green-500' : 'bg-secondary'}`}>

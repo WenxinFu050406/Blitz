@@ -302,6 +302,12 @@ export const translations = {
       // Groups
       bayAreaRiders: 'Bay Area Riders',
       ecoWarriors: 'Eco Warriors',
+      recommendedRoutes: 'New Route Recommendations',
+      difficulty: 'Difficulty',
+      easy: 'Easy',
+      medium: 'Medium',
+      hard: 'Hard',
+      viewRoute: 'View Route',
     },
     // Me Page
     me: {
@@ -336,6 +342,55 @@ export const translations = {
       bio: 'Bio',
       location: 'Location',
       changeAvatar: 'Change Avatar',
+    },
+    // Settings
+    settings: {
+      title: 'Settings',
+      general: 'General',
+      language: 'Language',
+      darkMode: 'Dark Mode',
+      notifications: 'Notifications',
+      pushNotifications: 'Push Notifications',
+      pushDesc: 'Receive updates and alerts',
+      soundEffects: 'Sound Effects',
+      soundDesc: 'Play sounds for actions',
+      dataStorage: 'Data & Storage',
+      autoSync: 'Auto Sync',
+      syncDesc: 'Sync rides automatically',
+      clearCache: 'Clear Cache',
+      clearCacheDesc: 'Free up space',
+      downloadData: 'Download Data',
+      downloadDesc: 'Export your riding data',
+      about: 'About',
+      appVersion: 'App Version',
+      termsOfService: 'Terms of Service',
+      privacyPolicy: 'Privacy Policy',
+      openSourceLicenses: 'Open Source Licenses',
+    },
+    // Achievements
+    achievements: {
+      title: 'Achievements',
+      unlocked: 'Unlocked',
+      complete: 'Complete',
+      inProgress: 'In Progress',
+      progress: 'Progress',
+    },
+    // Ride History
+    rideHistory: {
+      title: 'Ride History',
+      duration: 'Duration',
+      avgSpeed: 'Avg Speed',
+      calories: 'Calories',
+    },
+    // Notifications
+    notifications: {
+      title: 'Notifications',
+      unread: 'unread',
+      markAllRead: 'Mark all as read',
+      likedPost: 'liked your post',
+      commented: 'commented',
+      startedFollowing: 'started following you',
+      unlockedAchievement: 'You unlocked',
     },
     // Common
     common: {
@@ -650,6 +705,12 @@ export const translations = {
       // Groups
       bayAreaRiders: '湾区骑行者',
       ecoWarriors: '环保勇士',
+      recommendedRoutes: '新路线推荐',
+      difficulty: '难度',
+      easy: '简单',
+      medium: '中等',
+      hard: '困难',
+      viewRoute: '查看路线',
     },
     // Me Page
     me: {
@@ -684,6 +745,55 @@ export const translations = {
       bio: '个人简介',
       location: '位置',
       changeAvatar: '更换头像',
+    },
+    // Settings
+    settings: {
+      title: '设置',
+      general: '常规',
+      language: '语言',
+      darkMode: '深色模式',
+      notifications: '通知',
+      pushNotifications: '推送通知',
+      pushDesc: '接收更新和提醒',
+      soundEffects: '音效',
+      soundDesc: '播放操作音效',
+      dataStorage: '数据与存储',
+      autoSync: '自动同步',
+      syncDesc: '自动同步骑行数据',
+      clearCache: '清除缓存',
+      clearCacheDesc: '释放空间',
+      downloadData: '下载数据',
+      downloadDesc: '导出您的骑行数据',
+      about: '关于',
+      appVersion: '应用版本',
+      termsOfService: '服务条款',
+      privacyPolicy: '隐私政策',
+      openSourceLicenses: '开源许可',
+    },
+    // Achievements
+    achievements: {
+      title: '成就',
+      unlocked: '已解锁',
+      complete: '完成',
+      inProgress: '进行中',
+      progress: '进度',
+    },
+    // Ride History
+    rideHistory: {
+      title: '骑行历史',
+      duration: '时长',
+      avgSpeed: '平均速度',
+      calories: '卡路里',
+    },
+    // Notifications
+    notifications: {
+      title: '通知',
+      unread: '未读',
+      markAllRead: '全部标记为已读',
+      likedPost: '赞了您的帖子',
+      commented: '评论了',
+      startedFollowing: '开始关注您',
+      unlockedAchievement: '您解锁了',
     },
     // Common
     common: {

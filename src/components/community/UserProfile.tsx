@@ -4,6 +4,7 @@ import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
+import { UserAvatar } from '../UserAvatar';
 import { useLanguage } from '../../context/LanguageContext';
 import { getTranslation } from '../../locales/translations';
 
@@ -53,11 +54,7 @@ export function UserProfile({ user, onBack, onFollow }: UserProfileProps) {
           </div>
           <div className="absolute -bottom-10 left-4">
             <div className="w-24 h-24 rounded-full border-4 border-background overflow-hidden bg-secondary">
-              {user.avatar?.startsWith('http') || user.avatar?.startsWith('/') ? (
-                <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-2xl">{user.avatar || '👤'}</div>
-              )}
+              <UserAvatar src={user.avatar} alt={user.name} />
             </div>
           </div>
         </div>

@@ -2,12 +2,18 @@ import { ArrowLeft, Globe, Moon, Volume2, Smartphone, Download, ChevronRight } f
 import { Card } from '../ui/card';
 import { Switch } from '../ui/switch';
 import { useState } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
+import { getTranslation } from '../../locales/translations';
 
 interface SettingsProps {
   onBack: () => void;
 }
 
 export function Settings({ onBack }: SettingsProps) {
+  const { language } = useLanguage();
+  const t = getTranslation(language).settings;
+  const tMain = getTranslation(language).mainPage; // For on/off
+
   const [darkMode, setDarkMode] = useState(false);
   const [notifications, setNotifications] = useState(true);
   const [soundEffects, setSoundEffects] = useState(true);
@@ -23,21 +29,21 @@ export function Settings({ onBack }: SettingsProps) {
         >
           <ArrowLeft className="w-5 h-5 text-white" />
         </button>
-        <h2 className="text-base text-white">Settings</h2>
+        <h2 className="text-base text-white">{t.title}</h2>
       </div>
 
       {/* Content */}
       <div className="flex-1 overflow-auto p-4 space-y-4 bg-black">
         {/* General Settings */}
         <div>
-          <h3 className="text-sm text-gray-400 mb-3">General</h3>
+          <h3 className="text-sm text-gray-400 mb-3">{t.general}</h3>
           <Card className="divide-y divide-[#333] border border-[#333] bg-[#1a1a1a]">
             <div className="p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Globe className="w-5 h-5 text-[#00ff88]" />
                 <div>
-                  <p className="text-sm text-white">Language</p>
-                  <p className="text-xs text-gray-500 mt-0.5">English</p>
+                  <p className="text-sm text-white">{t.language}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{language === 'en' ? 'English' : '简体中文'}</p>
                 </div>
               </div>
               <ChevronRight className="w-4 h-4 text-gray-600" />
@@ -47,8 +53,8 @@ export function Settings({ onBack }: SettingsProps) {
               <div className="flex items-center gap-3">
                 <Moon className="w-5 h-5 text-[#00ff88]" />
                 <div>
-                  <p className="text-sm text-white">Dark Mode</p>
-                  <p className="text-xs text-gray-500 mt-0.5">On</p>
+                  <p className="text-sm text-white">{t.darkMode}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{tMain.on}</p>
                 </div>
               </div>
               <Switch
@@ -62,14 +68,14 @@ export function Settings({ onBack }: SettingsProps) {
 
         {/* Notifications Settings */}
         <div>
-          <h3 className="text-sm text-gray-400 mb-3">Notifications</h3>
+          <h3 className="text-sm text-gray-400 mb-3">{t.notifications}</h3>
           <Card className="divide-y divide-[#333] border border-[#333] bg-[#1a1a1a]">
             <div className="p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Smartphone className="w-5 h-5 text-[#00ff88]" />
                 <div>
-                  <p className="text-sm text-white">Push Notifications</p>
-                  <p className="text-xs text-gray-500 mt-0.5">Receive updates and alerts</p>
+                  <p className="text-sm text-white">{t.pushNotifications}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{t.pushDesc}</p>
                 </div>
               </div>
               <Switch
@@ -82,8 +88,8 @@ export function Settings({ onBack }: SettingsProps) {
               <div className="flex items-center gap-3">
                 <Volume2 className="w-5 h-5 text-[#00ff88]" />
                 <div>
-                  <p className="text-sm text-white">Sound Effects</p>
-                  <p className="text-xs text-gray-500 mt-0.5">Play sounds for actions</p>
+                  <p className="text-sm text-white">{t.soundEffects}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{t.soundDesc}</p>
                 </div>
               </div>
               <Switch
@@ -96,14 +102,14 @@ export function Settings({ onBack }: SettingsProps) {
 
         {/* Data & Storage */}
         <div>
-          <h3 className="text-sm text-gray-400 mb-3">Data & Storage</h3>
+          <h3 className="text-sm text-gray-400 mb-3">{t.dataStorage}</h3>
           <Card className="divide-y divide-[#333] border border-[#333] bg-[#1a1a1a]">
             <div className="p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Download className="w-5 h-5 text-[#00ff88]" />
                 <div>
-                  <p className="text-sm text-white">Auto Sync</p>
-                  <p className="text-xs text-gray-500 mt-0.5">Sync rides automatically</p>
+                  <p className="text-sm text-white">{t.autoSync}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{t.syncDesc}</p>
                 </div>
               </div>
               <Switch
@@ -114,16 +120,16 @@ export function Settings({ onBack }: SettingsProps) {
             
             <button className="p-4 flex items-center justify-between w-full hover:bg-[#2a2a2a] transition-colors">
               <div className="text-left">
-                <p className="text-sm text-white">Clear Cache</p>
-                <p className="text-xs text-gray-500 mt-0.5">Free up 125 MB</p>
+                <p className="text-sm text-white">{t.clearCache}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{t.clearCacheDesc}</p>
               </div>
               <ChevronRight className="w-4 h-4 text-gray-600" />
             </button>
             
             <button className="p-4 flex items-center justify-between w-full hover:bg-[#2a2a2a] transition-colors">
               <div className="text-left">
-                <p className="text-sm text-white">Download Data</p>
-                <p className="text-xs text-gray-500 mt-0.5">Export your riding data</p>
+                <p className="text-sm text-white">{t.downloadData}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{t.downloadDesc}</p>
               </div>
               <ChevronRight className="w-4 h-4 text-gray-600" />
             </button>
@@ -132,25 +138,25 @@ export function Settings({ onBack }: SettingsProps) {
 
         {/* About */}
         <div>
-          <h3 className="text-sm text-gray-400 mb-3">About</h3>
+          <h3 className="text-sm text-gray-400 mb-3">{t.about}</h3>
           <Card className="divide-y divide-[#333] border border-[#333] bg-[#1a1a1a]">
             <div className="p-4">
-              <p className="text-sm text-gray-500">App Version</p>
+              <p className="text-sm text-gray-500">{t.appVersion}</p>
               <p className="text-sm mt-1 text-white">1.0.0</p>
             </div>
             
             <button className="p-4 flex items-center justify-between w-full hover:bg-[#2a2a2a] transition-colors">
-              <p className="text-sm text-white">Terms of Service</p>
+              <p className="text-sm text-white">{t.termsOfService}</p>
               <ChevronRight className="w-4 h-4 text-gray-600" />
             </button>
             
             <button className="p-4 flex items-center justify-between w-full hover:bg-[#2a2a2a] transition-colors">
-              <p className="text-sm text-white">Privacy Policy</p>
+              <p className="text-sm text-white">{t.privacyPolicy}</p>
               <ChevronRight className="w-4 h-4 text-gray-600" />
             </button>
             
             <button className="p-4 flex items-center justify-between w-full hover:bg-[#2a2a2a] transition-colors">
-              <p className="text-sm text-white">Open Source Licenses</p>
+              <p className="text-sm text-white">{t.openSourceLicenses}</p>
               <ChevronRight className="w-4 h-4 text-gray-600" />
             </button>
           </Card>

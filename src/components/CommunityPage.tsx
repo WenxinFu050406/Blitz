@@ -19,6 +19,7 @@ import { ChatPage } from './community/ChatPage';
 import { Leaderboard } from './community/Leaderboard';
 import { AddFriend } from './community/AddFriend';
 import { UserProfile } from './community/UserProfile';
+import { UserAvatar } from './UserAvatar';
 import { useLanguage } from '../context/LanguageContext';
 import { getTranslation } from '../locales/translations';
 import { useAuth } from '../context/AuthContext';
@@ -134,6 +135,7 @@ export function CommunityPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [displayFriends, setDisplayFriends] = useState<any[]>([]);
   const [friendRequests, setFriendRequests] = useState<any[]>([]); // New state for requests
+  const [joinedGroups, setJoinedGroups] = useState<string[]>([]);
 
   // Load posts and users from API
   useEffect(() => {
@@ -193,6 +195,19 @@ export function CommunityPage() {
     
     setSuggestedUsers(usersToShow);
     setIsLoading(false);
+  };
+
+  const handleJoinGroup = (groupId: string) => {
+    if (joinedGroups.includes(groupId)) return;
+
+    // Show confirmation
+    const message = language === 'zh-CN' 
+      ? '申请已发送！' 
+      : 'Request Sent!';
+    
+    alert(message);
+    
+    setJoinedGroups([...joinedGroups, groupId]);
   };
 
   const handleLikePost = async (postId: string) => {
@@ -507,11 +522,7 @@ export function CommunityPage() {
             <Card className="p-4 border border-border bg-card">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 bg-secondary rounded-full flex items-center justify-center text-base overflow-hidden">
-                  {currentUser?.avatar?.startsWith('http') || currentUser?.avatar?.startsWith('/') ? (
-                    <img src={currentUser.avatar} alt="Avatar" className="w-full h-full object-cover" />
-                  ) : (
-                    currentUser?.avatar || '👤'
-                  )}
+                  <UserAvatar src={currentUser?.avatar} alt="Avatar" />
                 </div>
                 <button
                   onClick={() => setViewMode('create-post')}
@@ -548,11 +559,7 @@ export function CommunityPage() {
                       className="w-9 h-9 bg-secondary rounded-full flex items-center justify-center text-base border border-border overflow-hidden cursor-pointer"
                       onClick={(e) => handleUserClick(e, post.userId, post.userName, post.userAvatar)}
                     >
-                      {post.userAvatar?.startsWith('http') || post.userAvatar?.startsWith('/') ? (
-                        <img src={post.userAvatar} alt={post.userName} className="w-full h-full object-cover" />
-                      ) : (
-                        post.userAvatar
-                      )}
+                      <UserAvatar src={post.userAvatar} alt={post.userName} />
                     </div>
                     <div className="flex-1">
                       <p 
@@ -715,11 +722,7 @@ export function CommunityPage() {
                         <Card key={friend.id} className="p-4 hover:bg-secondary/50 transition-colors border border-border bg-card">
                             <div className="flex items-center gap-3">
                             <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center text-xl border border-border overflow-hidden">
-                                {friend.avatar?.startsWith('http') || friend.avatar?.startsWith('/') ? (
-                                    <img src={friend.avatar} alt={friend.name} className="w-full h-full object-cover" />
-                                ) : (
-                                    friend.avatar || '👤'
-                                )}
+                                <UserAvatar src={friend.avatar} alt={friend.name} />
                             </div>
                             <div className="flex-1">
                                 <p className="text-sm font-medium">{friend.name}</p>
@@ -759,7 +762,7 @@ export function CommunityPage() {
                             <Card key={req.id} className="p-4 hover:bg-secondary/50 transition-colors border border-border bg-card">
                                 <div className="flex items-center gap-3">
                                     <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center text-xl border border-border overflow-hidden">
-                                         {req.avatar}
+                                         <UserAvatar src={req.avatar} alt={req.name} />
                                     </div>
                                     <div className="flex-1">
                                         <p className="text-sm font-medium">{req.name}</p>
@@ -800,11 +803,7 @@ export function CommunityPage() {
                       className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center text-xl overflow-hidden cursor-pointer"
                       onClick={(e) => handleUserClick(e, user.id, user.name, user.avatar)}
                     >
-                      {user.avatar?.startsWith('http') || user.avatar?.startsWith('/') ? (
-                        <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
-                      ) : (
-                        user.avatar || '👤'
-                      )}
+                      <UserAvatar src={user.avatar} alt={user.name} />
                     </div>
                     <div className="flex-1">
                       <p 
@@ -856,11 +855,107 @@ export function CommunityPage() {
                   <p className="text-sm font-medium">Bay Area Riders</p>
                   <p className="text-xs text-muted-foreground mt-0.5">234 {t.members} • 5 {t.ridesPerWeek}</p>
                 </div>
-                <button className="px-3 py-1.5 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors text-sm">
-                  {t.join}
+                <button 
+                  onClick={() => handleJoinGroup('bay-area-riders')}
+                  disabled={joinedGroups.includes('bay-area-riders')}
+                  className={`px-3 py-1.5 rounded-lg transition-colors text-sm ${
+                    joinedGroups.includes('bay-area-riders')
+                      ? 'bg-secondary text-muted-foreground cursor-not-allowed'
+                      : 'border border-primary text-primary hover:bg-primary/10'
+                  }`}
+                >
+                  {joinedGroups.includes('bay-area-riders') 
+                    ? (language === 'zh-CN' ? '等待通过' : 'Pending') 
+                    : t.join}
                 </button>
               </div>
             </Card>
+            
+            <Card className="p-4 hover:bg-secondary/50 transition-colors border border-border bg-card mt-3">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center text-xl text-green-500">
+                  🌱
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium">{t.ecoWarriors}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">156 {t.members} • 3 {t.ridesPerWeek}</p>
+                </div>
+                <button 
+                  onClick={() => handleJoinGroup('eco-warriors')}
+                  disabled={joinedGroups.includes('eco-warriors')}
+                  className={`px-3 py-1.5 rounded-lg transition-colors text-sm ${
+                    joinedGroups.includes('eco-warriors')
+                      ? 'bg-secondary text-muted-foreground cursor-not-allowed'
+                      : 'border border-primary text-primary hover:bg-primary/10'
+                  }`}
+                >
+                  {joinedGroups.includes('eco-warriors') 
+                    ? (language === 'zh-CN' ? '等待通过' : 'Pending') 
+                    : t.join}
+                </button>
+              </div>
+            </Card>
+
+            {/* New Route Recommendations */}
+            <h3 className="text-base pt-3 font-medium">{t.recommendedRoutes}</h3>
+            <div className="space-y-3">
+              {[
+                {
+                  id: 'r1',
+                  name: 'Sunset Coastal Ride',
+                  distance: '15 km',
+                  difficulty: 'easy',
+                  image: 'https://images.unsplash.com/photo-1588917901548-aee9491b4204?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdW5zZXQlMjBjb2FzdGFsJTIwcm9hZCUyMGN5Y2xpbmd8ZW58MXx8fHwxNzYzOTI0NzY1fDA&ixlib=rb-4.1.0&q=80&w=1080',
+                  location: 'San Francisco'
+                },
+                {
+                  id: 'r2',
+                  name: 'Mountain View Trail',
+                  distance: '28 km',
+                  difficulty: 'hard',
+                  image: 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=400',
+                  location: 'Marin County'
+                },
+                {
+                  id: 'r3',
+                  name: 'City Park Loop',
+                  distance: '10 km',
+                  difficulty: 'medium',
+                  image: 'https://images.unsplash.com/photo-1496196614460-48988a57fccf?w=400',
+                  location: 'Golden Gate Park'
+                }
+              ].map(route => (
+                <Card key={route.id} className="overflow-hidden border border-border bg-card group cursor-pointer">
+                  <div className="relative h-32">
+                    <ImageWithFallback
+                      src={route.image}
+                      alt={route.name}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-[10px] text-white uppercase font-bold tracking-wider border border-white/10">
+                      {route.difficulty === 'easy' && t.easy}
+                      {route.difficulty === 'medium' && t.medium}
+                      {route.difficulty === 'hard' && t.hard}
+                    </div>
+                  </div>
+                  <div className="p-3">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <h4 className="font-medium text-sm group-hover:text-primary transition-colors">{route.name}</h4>
+                        <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+                          <MapPin className="w-3 h-3" />
+                          {route.location}
+                        </div>
+                      </div>
+                      <span className="text-sm font-bold text-primary">{route.distance}</span>
+                    </div>
+                    <Button variant="outline" className="w-full h-8 text-xs border-primary text-primary hover:bg-primary hover:text-black">
+                      {t.viewRoute}
+                    </Button>
+                  </div>
+                </Card>
+              ))}
+            </div>
           </div>
         </TabsContent>
       </Tabs>

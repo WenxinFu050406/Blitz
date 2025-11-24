@@ -1,21 +1,26 @@
 import { ArrowLeft, Heart, MessageCircle, UserPlus, Award, Bell } from 'lucide-react';
 import { Card } from '../ui/card';
 import { Badge } from '../ui/badge';
+import { useLanguage } from '../../context/LanguageContext';
+import { getTranslation } from '../../locales/translations';
 
 interface NotificationsProps {
   onBack: () => void;
 }
 
 export function Notifications({ onBack }: NotificationsProps) {
+  const { language } = useLanguage();
+  const t = getTranslation(language).notifications;
+
   const notifications = [
-    { id: 1, type: 'like', user: 'Sarah Chen', avatar: '👩', message: 'liked your post', time: '5m ago', unread: true },
-    { id: 2, type: 'comment', user: 'Mike Johnson', avatar: '👨', message: 'commented: "Great ride!"', time: '15m ago', unread: true },
-    { id: 3, type: 'friend', user: 'Emma Wilson', avatar: '👧', message: 'started following you', time: '1h ago', unread: true },
-    { id: 4, type: 'achievement', message: 'You unlocked "1000 KM Club" achievement!', time: '2h ago', unread: false },
-    { id: 5, type: 'like', user: 'David Park', avatar: '👨‍💼', message: 'liked your post', time: '3h ago', unread: false },
-    { id: 6, type: 'comment', user: 'Lisa Wang', avatar: '👩‍🦰', message: 'commented: "Where is this trail?"', time: '5h ago', unread: false },
-    { id: 7, type: 'friend', user: 'Tom Anderson', avatar: '👨‍🦱', message: 'started following you', time: '1d ago', unread: false },
-    { id: 8, type: 'achievement', message: 'You unlocked "Speed Demon" achievement!', time: '2d ago', unread: false },
+    { id: 1, type: 'like', user: 'Sarah Chen', avatar: '👩', message: t.likedPost, time: '5m ago', unread: true },
+    { id: 2, type: 'comment', user: 'Mike Johnson', avatar: '👨', message: `${t.commented}: "Great ride!"`, time: '15m ago', unread: true },
+    { id: 3, type: 'friend', user: 'Emma Wilson', avatar: '👧', message: t.startedFollowing, time: '1h ago', unread: true },
+    { id: 4, type: 'achievement', message: `${t.unlockedAchievement} "1000 KM Club"!`, time: '2h ago', unread: false },
+    { id: 5, type: 'like', user: 'David Park', avatar: '👨‍💼', message: t.likedPost, time: '3h ago', unread: false },
+    { id: 6, type: 'comment', user: 'Lisa Wang', avatar: '👩‍🦰', message: `${t.commented}: "Where is this trail?"`, time: '5h ago', unread: false },
+    { id: 7, type: 'friend', user: 'Tom Anderson', avatar: '👨‍🦱', message: t.startedFollowing, time: '1d ago', unread: false },
+    { id: 8, type: 'achievement', message: `${t.unlockedAchievement} "Speed Demon"!`, time: '2d ago', unread: false },
   ];
 
   const unreadCount = notifications.filter(n => n.unread).length;
@@ -41,8 +46,8 @@ export function Notifications({ onBack }: NotificationsProps) {
           <ArrowLeft className="w-5 h-5 text-white" />
         </button>
         <div className="flex-1">
-          <h2 className="text-base text-white">Notifications</h2>
-          <p className="text-xs text-gray-400 mt-0.5">{unreadCount} unread</p>
+          <h2 className="text-base text-white">{t.title}</h2>
+          <p className="text-xs text-gray-400 mt-0.5">{unreadCount} {t.unread}</p>
         </div>
         <Bell className="w-6 h-6 text-[#00ff88]" />
       </div>
@@ -92,7 +97,7 @@ export function Notifications({ onBack }: NotificationsProps) {
       {/* Mark All as Read */}
       <div className="p-4 border-t border-[#333] bg-black">
         <button className="w-full py-2.5 text-sm text-[#00ff88] hover:bg-[#1a1a1a] rounded-lg transition-colors">
-          Mark all as read
+          {t.markAllRead}
         </button>
       </div>
     </div>

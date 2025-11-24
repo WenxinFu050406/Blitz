@@ -1,11 +1,17 @@
 import { ArrowLeft, Calendar, MapPin, Clock, Zap } from 'lucide-react';
 import { Card } from '../ui/card';
+import { useLanguage } from '../../context/LanguageContext';
+import { getTranslation } from '../../locales/translations';
 
 interface RideHistoryProps {
   onBack: () => void;
 }
 
 export function RideHistory({ onBack }: RideHistoryProps) {
+  const { language } = useLanguage();
+  const t = getTranslation(language).rideHistory;
+  const tMain = getTranslation(language).statistics; // Reuse statistics translations for common terms
+
   const rides = [
     { id: 1, date: 'Nov 12, 2024', time: '14:30', distance: 25.5, duration: '1h 45m', avgSpeed: 14.5, calories: 420, route: 'Golden Gate Park Loop' },
     { id: 2, date: 'Nov 11, 2024', time: '09:15', distance: 18.2, duration: '1h 20m', avgSpeed: 13.7, calories: 310, route: 'Embarcadero Trail' },
@@ -29,8 +35,8 @@ export function RideHistory({ onBack }: RideHistoryProps) {
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div className="flex-1">
-          <h2 className="text-base">Ride History</h2>
-          <p className="text-xs opacity-90 mt-0.5 text-gray-400">{totalRides} rides • {totalDistance.toFixed(1)} km</p>
+          <h2 className="text-base">{t.title}</h2>
+          <p className="text-xs opacity-90 mt-0.5 text-gray-400">{totalRides} {tMain.rides} • {totalDistance.toFixed(1)} {tMain.kilometers}</p>
         </div>
         <Calendar className="w-6 h-6 text-[#00ff88]" />
       </div>
@@ -45,7 +51,7 @@ export function RideHistory({ onBack }: RideHistoryProps) {
                 <p className="text-xs text-gray-400 mt-0.5">{ride.date} • {ride.time}</p>
               </div>
               <div className="text-right">
-                <p className="text-lg text-[#00ff88]">{ride.distance} km</p>
+                <p className="text-lg text-[#00ff88]">{ride.distance} {language === 'zh-CN' ? 'km' : 'km'}</p>
               </div>
             </div>
 
@@ -53,20 +59,20 @@ export function RideHistory({ onBack }: RideHistoryProps) {
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1 text-gray-400 mb-1">
                   <Clock className="w-3.5 h-3.5" />
-                  <span className="text-xs">Duration</span>
+                  <span className="text-xs">{t.duration}</span>
                 </div>
                 <p className="text-sm text-white">{ride.duration}</p>
               </div>
               <div className="text-center border-l border-r border-[#333]">
                 <div className="flex items-center justify-center gap-1 text-gray-400 mb-1">
                   <Zap className="w-3.5 h-3.5" />
-                  <span className="text-xs">Avg Speed</span>
+                  <span className="text-xs">{t.avgSpeed}</span>
                 </div>
                 <p className="text-sm text-white">{ride.avgSpeed} km/h</p>
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1 text-gray-400 mb-1">
-                  <span className="text-xs">🔥 Calories</span>
+                  <span className="text-xs">🔥 {t.calories}</span>
                 </div>
                 <p className="text-sm text-white">{ride.calories}</p>
               </div>

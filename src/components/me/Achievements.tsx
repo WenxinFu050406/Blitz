@@ -1,12 +1,17 @@
 import { ArrowLeft, Trophy, Target, Zap, Award } from 'lucide-react';
 import { Card } from '../ui/card';
 import { Badge } from '../ui/badge';
+import { useLanguage } from '../../context/LanguageContext';
+import { getTranslation } from '../../locales/translations';
 
 interface AchievementsProps {
   onBack: () => void;
 }
 
 export function Achievements({ onBack }: AchievementsProps) {
+  const { language } = useLanguage();
+  const t = getTranslation(language).achievements;
+
   const achievements = [
     { id: 1, icon: '🏆', name: '1000 KM Club', description: 'Ride 1000 kilometers', progress: 100, unlocked: true, date: 'Nov 1, 2024' },
     { id: 2, icon: '⚡', name: 'Speed Demon', description: 'Reach 40 km/h', progress: 100, unlocked: true, date: 'Oct 15, 2024' },
@@ -35,8 +40,8 @@ export function Achievements({ onBack }: AchievementsProps) {
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div className="flex-1">
-          <h2 className="text-base">Achievements</h2>
-          <p className="text-xs opacity-90 mt-0.5 text-gray-400">{unlockedCount}/{achievements.length} Unlocked</p>
+          <h2 className="text-base">{t.title}</h2>
+          <p className="text-xs opacity-90 mt-0.5 text-gray-400">{unlockedCount}/{achievements.length} {t.unlocked}</p>
         </div>
         <Trophy className="w-8 h-8 text-[#00ff88]" />
       </div>
@@ -46,15 +51,15 @@ export function Achievements({ onBack }: AchievementsProps) {
         <div className="grid grid-cols-3 gap-3 text-center text-white">
           <div>
             <p className="text-2xl text-[#00ff88]">{unlockedCount}</p>
-            <p className="text-xs text-gray-400 mt-0.5">Unlocked</p>
+            <p className="text-xs text-gray-400 mt-0.5">{t.unlocked}</p>
           </div>
           <div>
             <p className="text-2xl text-[#00ff88]">{Math.round((unlockedCount / achievements.length) * 100)}%</p>
-            <p className="text-xs text-gray-400 mt-0.5">Complete</p>
+            <p className="text-xs text-gray-400 mt-0.5">{t.complete}</p>
           </div>
           <div>
             <p className="text-2xl text-white">{achievements.length - unlockedCount}</p>
-            <p className="text-xs text-gray-400 mt-0.5">In Progress</p>
+            <p className="text-xs text-gray-400 mt-0.5">{t.inProgress}</p>
           </div>
         </div>
       </div>
@@ -86,18 +91,18 @@ export function Achievements({ onBack }: AchievementsProps) {
                   {achievement.unlocked && (
                     <Badge className="bg-[#00ff88] text-black text-xs px-2 flex-shrink-0">
                       <Award className="w-3 h-3 mr-1" />
-                      Unlocked
+                      {t.unlocked}
                     </Badge>
                   )}
                 </div>
                 <p className="text-xs text-gray-400 mb-2">{achievement.description}</p>
                 
                 {achievement.unlocked ? (
-                  <p className="text-xs text-[#00ff88]">Unlocked on {achievement.date}</p>
+                  <p className="text-xs text-[#00ff88]">{t.unlocked} {language === 'zh-CN' ? '' : 'on'} {achievement.date}</p>
                 ) : (
                   <div>
                     <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
-                      <span>Progress</span>
+                      <span>{t.progress}</span>
                       <span>{achievement.progress}%</span>
                     </div>
                     <div className="w-full h-2 bg-[#2a2a2a] rounded-full overflow-hidden">
